@@ -1,0 +1,12 @@
+body {
+  background-color: var(--main-color-blue);
+}
+
+#content {
+  color: var(--main-color-white);
+  background-color: var(--main-color-red);
+  width: 45%;
+  margin: auto;
+  margin-top: 10%;
+  padding: 75px;
+}
