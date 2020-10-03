@@ -3,6 +3,7 @@ body {
 }
 
 #content {
+  font-family: "montserrat", sans-serif;
   color: var(--main-color-white);
   background-color: var(--main-color-red);
   width: 45%;
