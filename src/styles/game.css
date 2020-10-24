@@ -1,15 +1,14 @@
-table, th, td {
+#content table, th, td {
   border: 1px solid var(--main-color-white);
   border-collapse: collapse;
 }
-tr {
+#content table tbody tr {
   width: 85%;
   margin-bottom: 150px;
 }
-td {
+#content table tbody tr td {
   width: 10%;
 }
-hr {
-  width: 100%;
+#center-div hr {
   color: var(--main-color-white);
 }
