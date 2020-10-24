@@ -1,0 +1,15 @@
+table, th, td {
+  border: 1px solid var(--main-color-white);
+  border-collapse: collapse;
+}
+tr {
+  width: 85%;
+  margin-bottom: 150px;
+}
+td {
+  width: 10%;
+}
+hr {
+  width: 100%;
+  color: var(--main-color-white);
+}
