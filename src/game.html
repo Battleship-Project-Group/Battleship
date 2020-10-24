@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Battleship</title>
+  <link rel="stylesheet" href="styles/colors.css">
+  <link rel="stylesheet" href="styles/cohesive.css">
+  <link rel="stylesheet" href="styles/game.css">
+</head>
+
+<body>
+  <div id="content">
+    <table id="enemy-table">
+      <tbody>
+        <tr>
+          <th> </th>
+          <th>A</th>
+          <th>B</th>
+          <th>C</th>
+          <th>D</th>
+          <th>E</th>
+          <th>F</th>
+          <th>G</th>
+          <th>H</th>
+          <th>I</th>
+          <th>J</th>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td id="enemy-A1"></td>
+          <td id="enemy-B1"></td>
+          <td id="enemy-C1"></td>
+          <td id="enemy-D1"></td>
+          <td id="enemy-E1"></td>
+          <td id="enemy-F1"></td>
+          <td id="enemy-G1"></td>
+          <td id="enemy-H1"></td>
+          <td id="enemy-I1"></td>
+          <td id="enemy-J1"></td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td id="enemy-A2"></td>
+          <td id="enemy-B2"></td>
+          <td id="enemy-C2"></td>
+          <td id="enemy-D2"></td>
+          <td id="enemy-E2"></td>
+          <td id="enemy-F2"></td>
+          <td id="enemy-G2"></td>
+          <td id="enemy-H2"></td>
+          <td id="enemy-I2"></td>
+          <td id="enemy-J2"></td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td id="enemy-A3"></td>
+          <td id="enemy-B3"></td>
+          <td id="enemy-C3"></td>
+          <td id="enemy-D3"></td>
+          <td id="enemy-E3"></td>
+          <td id="enemy-F3"></td>
+          <td id="enemy-G3"></td>
+          <td id="enemy-H3"></td>
+          <td id="enemy-I3"></td>
+          <td id="enemy-J3"></td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td id="enemy-A4"></td>
+          <td id="enemy-B4"></td>
+          <td id="enemy-C4"></td>
+          <td id="enemy-D4"></td>
+          <td id="enemy-E4"></td>
+          <td id="enemy-F4"></td>
+          <td id="enemy-G4"></td>
+          <td id="enemy-H4"></td>
+          <td id="enemy-I4"></td>
+          <td id="enemy-J4"></td>
+        </tr>
+        <tr>
+          <th>5</th>
+          <td id="enemy-A5"></td>
+          <td id="enemy-B5"></td>
+          <td id="enemy-C5"></td>
+          <td id="enemy-D5"></td>
+          <td id="enemy-E5"></td>
+          <td id="enemy-F5"></td>
+          <td id="enemy-G5"></td>
+          <td id="enemy-H5"></td>
+          <td id="enemy-I5"></td>
+          <td id="enemy-J5"></td>
+        </tr>
+        <tr>
+          <th>6</th>
+          <td id="enemy-A6"></td>
+          <td id="enemy-B6"></td>
+          <td id="enemy-C6"></td>
+          <td id="enemy-D6"></td>
+          <td id="enemy-E6"></td>
+          <td id="enemy-F6"></td>
+          <td id="enemy-G6"></td>
+          <td id="enemy-H6"></td>
+          <td id="enemy-I6"></td>
+          <td id="enemy-J6"></td>
+        </tr>
+        <tr>
+          <th>7</th>
+          <td id="enemy-A7"></td>
+          <td id="enemy-B7"></td>
+          <td id="enemy-C7"></td>
+          <td id="enemy-D7"></td>
+          <td id="enemy-E7"></td>
+          <td id="enemy-F7"></td>
+          <td id="enemy-G7"></td>
+          <td id="enemy-H7"></td>
+          <td id="enemy-I7"></td>
+          <td id="enemy-J7"></td>
+        </tr>
+        <tr>
+          <th>8</th>
+          <td id="enemy-A8"></td>
+          <td id="enemy-B8"></td>
+          <td id="enemy-C8"></td>
+          <td id="enemy-D8"></td>
+          <td id="enemy-E8"></td>
+          <td id="enemy-F8"></td>
+          <td id="enemy-G8"></td>
+          <td id="enemy-H8"></td>
+          <td id="enemy-I8"></td>
+          <td id="enemy-J8"></td>
+        </tr>
+        <tr>
+          <th>9</th>
+          <td id="enemy-A9"></td>
+          <td id="enemy-B9"></td>
+          <td id="enemy-C9"></td>
+          <td id="enemy-D9"></td>
+          <td id="enemy-E9"></td>
+          <td id="enemy-F9"></td>
+          <td id="enemy-G9"></td>
+          <td id="enemy-H9"></td>
+          <td id="enemy-I9"></td>
+          <td id="enemy-J9"></td>
+        </tr>
+        <tr>
+          <th>10</th>
+          <td id="enemy-A10"></td>
+          <td id="enemy-B10"></td>
+          <td id="enemy-C10"></td>
+          <td id="enemy-D10"></td>
+          <td id="enemy-E10"></td>
+          <td id="enemy-F10"></td>
+          <td id="enemy-G10"></td>
+          <td id="enemy-H10"></td>
+          <td id="enemy-I10"></td>
+          <td id="enemy-J10"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="center-div">
+      <hr>
+    </div>
+
+    <table id="player-table">
+      <tbody>
+        <tr>
+          <th> </th>
+          <th>A</th>
+          <th>B</th>
+          <th>C</th>
+          <th>D</th>
+          <th>E</th>
+          <th>F</th>
+          <th>G</th>
+          <th>H</th>
+          <th>I</th>
+          <th>J</th>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td id="my-A1"></td>
+          <td id="my-B1"></td>
+          <td id="my-C1"></td>
+          <td id="my-D1"></td>
+          <td id="my-E1"></td>
+          <td id="my-F1"></td>
+          <td id="my-G1"></td>
+          <td id="my-H1"></td>
+          <td id="my-I1"></td>
+          <td id="my-J1"></td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td id="my-A2"></td>
+          <td id="my-B2"></td>
+          <td id="my-C2"></td>
+          <td id="my-D2"></td>
+          <td id="my-E2"></td>
+          <td id="my-F2"></td>
+          <td id="my-G2"></td>
+          <td id="my-H2"></td>
+          <td id="my-I2"></td>
+          <td id="my-J2"></td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td id="my-A3"></td>
+          <td id="my-B3"></td>
+          <td id="my-C3"></td>
+          <td id="my-D3"></td>
+          <td id="my-E3"></td>
+          <td id="my-F3"></td>
+          <td id="my-G3"></td>
+          <td id="my-H3"></td>
+          <td id="my-I3"></td>
+          <td id="my-J3"></td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td id="my-A4"></td>
+          <td id="my-B4"></td>
+          <td id="my-C4"></td>
+          <td id="my-D4"></td>
+          <td id="my-E4"></td>
+          <td id="my-F4"></td>
+          <td id="my-G4"></td>
+          <td id="my-H4"></td>
+          <td id="my-I4"></td>
+          <td id="my-J4"></td>
+        </tr>
+        <tr>
+          <th>5</th>
+          <td id="my-A5"></td>
+          <td id="my-B5"></td>
+          <td id="my-C5"></td>
+          <td id="my-D5"></td>
+          <td id="my-E5"></td>
+          <td id="my-F5"></td>
+          <td id="my-G5"></td>
+          <td id="my-H5"></td>
+          <td id="my-I5"></td>
+          <td id="my-J5"></td>
+        </tr>
+        <tr>
+          <th>6</th>
+          <td id="my-A6"></td>
+          <td id="my-B6"></td>
+          <td id="my-C6"></td>
+          <td id="my-D6"></td>
+          <td id="my-E6"></td>
+          <td id="my-F6"></td>
+          <td id="my-G6"></td>
+          <td id="my-H6"></td>
+          <td id="my-I6"></td>
+          <td id="my-J6"></td>
+        </tr>
+        <tr>
+          <th>7</th>
+          <td id="my-A7"></td>
+          <td id="my-B7"></td>
+          <td id="my-C7"></td>
+          <td id="my-D7"></td>
+          <td id="my-E7"></td>
+          <td id="my-F7"></td>
+          <td id="my-G7"></td>
+          <td id="my-H7"></td>
+          <td id="my-I7"></td>
+          <td id="my-J7"></td>
+        </tr>
+        <tr>
+          <th>8</th>
+          <td id="my-A8"></td>
+          <td id="my-B8"></td>
+          <td id="my-C8"></td>
+          <td id="my-D8"></td>
+          <td id="my-E8"></td>
+          <td id="my-F8"></td>
+          <td id="my-G8"></td>
+          <td id="my-H8"></td>
+          <td id="my-I8"></td>
+          <td id="my-J8"></td>
+        </tr>
+        <tr>
+          <th>9</th>
+          <td id="my-A9"></td>
+          <td id="my-B9"></td>
+          <td id="my-C9"></td>
+          <td id="my-D9"></td>
+          <td id="my-E9"></td>
+          <td id="my-F9"></td>
+          <td id="my-G9"></td>
+          <td id="my-H9"></td>
+          <td id="my-I9"></td>
+          <td id="my-J9"></td>
+        </tr>
+        <tr>
+          <th>10</th>
+          <td id="my-A10"></td>
+          <td id="my-B10"></td>
+          <td id="my-C10"></td>
+          <td id="my-D10"></td>
+          <td id="my-E10"></td>
+          <td id="my-F10"></td>
+          <td id="my-G10"></td>
+          <td id="my-H10"></td>
+          <td id="my-I10"></td>
+          <td id="my-J10"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>
