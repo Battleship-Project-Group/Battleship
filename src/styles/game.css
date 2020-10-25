@@ -1,0 +1,14 @@
+#content table, th, td {
+  border: 1px solid var(--main-color-white);
+  border-collapse: collapse;
+}
+#content table tbody tr {
+  width: 85%;
+  margin-bottom: 150px;
+}
+#content table tbody tr td {
+  width: 10%;
+}
+#center-div hr {
+  color: var(--main-color-white);
+}
