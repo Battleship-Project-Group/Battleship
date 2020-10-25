@@ -3,12 +3,51 @@
   border-collapse: collapse;
 }
 #content table tbody tr {
-  width: 85%;
+  width: 25px;
+  height: 25px;
   margin-bottom: 150px;
 }
 #content table tbody tr td {
-  width: 10%;
+  width: 25px;
 }
 #center-div hr {
   color: var(--main-color-white);
+  width: 20px;
+  align-self: center;
+}
+table {
+  margin: 20px;
+}
+#enemy-table {
+  float: left;
+}
+#player-table {
+  float: right;
+}
+#content {
+  overflow: auto;
+}
+#ships {
+  height: 25px;
+}
+#patrol {
+  width: 50px;
+}
+#sub {
+  width: 75px;
+}
+#destroyer {
+  width: 75px;
+}
+#battleship {
+  width: 100px;
+}
+#carrier {
+  width: 125px;
+}
+/*tr:hover {
+  background: red;
+} Highlight row and column, like targeting?*/
+td:hover {
+  background: white;
 }
