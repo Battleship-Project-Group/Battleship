@@ -15,7 +15,7 @@
   width: 20px;
   align-self: center;
 }
-table {
+#content table {
   margin: 20px;
 }
 #enemy-table {
@@ -48,6 +48,6 @@ table {
 /*tr:hover {
   background: red;
 } Highlight row and column, like targeting?*/
-td:hover {
+#content table tbody tr td:hover {
   background: white;
 }
