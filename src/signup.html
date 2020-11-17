@@ -7,33 +7,31 @@
   <link rel="stylesheet" href="styles/colors.css">
   <link rel="stylesheet" href="styles/signup.css">
   <link rel="stylesheet" href="styles/cohesive.css">
+  <script src="scripts/signup.js"></script>
 </head>
 
 <body>
   <section id="content">
-  <h1>Sign-Up</h1>
+    <h1>Sign-Up</h1>
 
-  <form method="post" action="index.html">
-    <fieldset>
+    <div>
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username">
+      <input type="text" id="username" name="username" value="">
       <p></p>
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password">
+      <input type="password" id="password" name="password" value="" onchange="validatePassword()">
       <p></p>
       <label for="cpassword">Confirm Password:</label>
-      <input type="password" id="cpassword" name="cpassword">
+      <input type="password" id="cpassword" name="cpassword" value="" onchange="pwMatch()">
       <p></p>
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email">
+      <input type="email" id="email" name="email" value="" onchange="validateEmail()">
       <p></p>
       <label for="cemail">Confirm Email:</label>
-      <input type="email" id="cemail" name="cemail">
+      <input type="email" id="cemail" name="cemail" value="" onchange="emailMatch()">
       <p></p>
-      <input type="submit" name="signup" value="Submit" id="signup">
-      <! Need to create JS function to check confirm fields >
-    </fieldset>
-  </form>
+      <button type="button" name="signup" id="signup" disabled="true" onclick="submit()">Register</button>
+    </div>
   </section>
 </body>
 
