@@ -328,14 +328,50 @@
       </tbody>
     </table>
     <div id="ships">
-      <img id="patrol" src="images/patrol.png">
-      <img id="sub" src="images/sub.png">
-      <img id="destroyer" src="images/destroyer.png">
-      <img id="battleship" src="images/battleship.png">
-      <img id="carrier" src="images/carrier.png">
+      <img id="patrol" onclick="selectShip(this.id)" src="images/patrol.png">
+      <img id="sub" onclick="selectShip(this.id)" src="images/sub.png">
+      <img id="destroyer" onclick="selectShip(this.id)" src="images/destroyer.png">
+      <img id="battleship" onclick="selectShip(this.id)" src="images/battleship.png">
+      <img id="carrier" onclick="selectShip(this.id)" src="images/carrier.png">
+      <button type="button" name="rotate" onclick="rotateShip();">Rotate</button>
       <!-- Temporary div, since the ships will be moved to the table -->
     </div>
   </div>
+
+  <script type="text/javascript">
+    var selectedShip = "";
+    var rotation = false;
+
+    function selectShip(ship) {
+      document.getElementById("patrol").style.border = "none";
+      document.getElementById("sub").style.border = "none";
+      document.getElementById("destroyer").style.border = "none";
+      document.getElementById("battleship").style.border = "none";
+      document.getElementById("carrier").style.border = "none";
+      selectedShip = document.getElementById(ship);
+      document.getElementById(ship).style.border = "3px solid black";
+    }
+
+    function rotateShip() {
+      if (selectedShip != "") {
+        if (rotation = false) {
+          selectedShip.setAttribute("style", "transform: rotate(90deg)");
+          rotation = true;
+        }
+        else {
+          selectedShip.setAttribute("style", "transform: rotate(-90deg)");
+          rotation = false;
+        }
+      }
+    }
+
+    function placeShip(cell) {
+      if (selectedShip == document.getElementById("patrol")) {
+        let length = 2;
+        
+      }
+    }
+  </script>
 </body>
 
 </html>
