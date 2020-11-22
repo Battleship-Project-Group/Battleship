@@ -360,10 +360,10 @@
     }
 
     function verifyAdj() {
+      let valid = false;
+      let letter = "";
+      let number = "";
       for (let i = 0; i < cellArr.length - 1; i++) {
-        let letter = "";
-        let number = "";
-        let valid = false;
         if (cellArr[i].includes("A")) { letter = "A"; }
         else if (cellArr[i].includes("B")) { letter = "B"; }
         else if (cellArr[i].includes("C")) { letter = "C"; }
@@ -386,21 +386,77 @@
         else if (cellArr[i].includes("8")) { number = "8"; }
         else if (cellArr[i].includes("9")) { number = "9"; }
         else if (cellArr[i].includes("10")) { number = "10"; }
-        else
+        else { return false; }
 
-        if (letter == "A") {
-          if (number == "1") {
+        if (letter == "A") { // my-A#
+          if (number == "1") { // my-A1
             if (cellArr[i+1] == "my-A2" || cellArr[i+1] == "my-B1") { valid = true; }
             else { return false; }
           }
-          else if (number == "10") {
+          else if (number == "10") { // my-A10
             if (cellArr[i+1] == "my-A9" || cellArr[i+1] == "my-B10") { valid = true; }
             else { return false; }
           }
-          else {
+          else { // my-A2...my-A9
             if ((cellArr[i+1] == "my-A" + String(Number(number) + 1)) || (cellArr[i+1] == "my-A" + String(Number(number) - 1)) || (cellArr[i+1] == "my-B" + number)) {
               valid = true;
             }
+            else { return false; }
+          }
+        }
+        else if (letter == "J") { //my-J#
+          if (number == "1") { // my-J1
+            if (cellArr[i+1] == "my-J2" || cellArr[i+1] == "my-I1") { valid = true; }
+            else { return false; }
+          }
+          else if (number == "10") { // my-J10
+            if (cellArr[i+1] == "my-J9" || cellArr[i+1] == "my-I10") { valid = true; }
+            else { return false; }
+          }
+          else { // my-J2...my-J9
+            if ((cellArr[i+1] == "my-J" + String(Number(number) + 1)) || (cellArr[i+1] == "my-J" + String(Number(number) - 1)) || (cellArr[i+1] == "my-I" + number)) {
+              valid = true;
+            }
+            else { return false; }
+          }
+        }
+        else if (letter == "B" || letter == "C" || letter == "D" || letter == "E" || letter == "F" || letter == "G" || letter == "H" || letter == "I") { // my-B#...my-I#
+          if (number == "1") { // my-B1...my-I1
+            if (cellArr[i+1] == "my-" + letter + "2") { valid = true; }
+            else if (letter == "B" && ((cellArr[i+1] == "my-A1") || (cellArr[i+1] == "my-C1"))) { valid = true; }
+            else if (letter == "C" && ((cellArr[i+1] == "my-B1") || (cellArr[i+1] == "my-D1"))) { valid = true; }
+            else if (letter == "D" && ((cellArr[i+1] == "my-C1") || (cellArr[i+1] == "my-E1"))) { valid = true; }
+            else if (letter == "E" && ((cellArr[i+1] == "my-D1") || (cellArr[i+1] == "my-F1"))) { valid = true; }
+            else if (letter == "F" && ((cellArr[i+1] == "my-E1") || (cellArr[i+1] == "my-G1"))) { valid = true; }
+            else if (letter == "G" && ((cellArr[i+1] == "my-F1") || (cellArr[i+1] == "my-H1"))) { valid = true; }
+            else if (letter == "H" && ((cellArr[i+1] == "my-G1") || (cellArr[i+1] == "my-I1"))) { valid = true; }
+            else if (letter == "I" && ((cellArr[i+1] == "my-H1") || (cellArr[i+1] == "my-J1"))) { valid = true; }
+            else { return false; }
+          }
+          else if (number == "10") { // my-B10...my-I10
+            if (cellArr[i+1] == "my-" + letter + "9") { valid = true; }
+            else if (letter == "B" && ((cellArr[i+1] == "my-A10") || (cellArr[i+1] == "my-C10"))) { valid = true; }
+            else if (letter == "C" && ((cellArr[i+1] == "my-B10") || (cellArr[i+1] == "my-D10"))) { valid = true; }
+            else if (letter == "D" && ((cellArr[i+1] == "my-C10") || (cellArr[i+1] == "my-E10"))) { valid = true; }
+            else if (letter == "E" && ((cellArr[i+1] == "my-D10") || (cellArr[i+1] == "my-F10"))) { valid = true; }
+            else if (letter == "F" && ((cellArr[i+1] == "my-E10") || (cellArr[i+1] == "my-G10"))) { valid = true; }
+            else if (letter == "G" && ((cellArr[i+1] == "my-F10") || (cellArr[i+1] == "my-H10"))) { valid = true; }
+            else if (letter == "H" && ((cellArr[i+1] == "my-G10") || (cellArr[i+1] == "my-I10"))) { valid = true; }
+            else if (letter == "I" && ((cellArr[i+1] == "my-H10") || (cellArr[i+1] == "my-J10"))) { valid = true; }
+            else { return false; }
+          }
+          else { // my-B2...my-I9
+            if ((cellArr[i+1] == "my-" + letter + String(Number(number) + 1)) || (cellArr[i+1] == "my-" + letter + String(Number(number) - 1))) {
+              valid = true;
+            }
+            else if (letter == "B" && ((cellArr[i+1] == "my-A" + number) || (cellArr[i+1] == "my-C" + number))) { valid = true; }
+            else if (letter == "C" && ((cellArr[i+1] == "my-B" + number) || (cellArr[i+1] == "my-D" + number))) { valid = true; }
+            else if (letter == "D" && ((cellArr[i+1] == "my-C" + number) || (cellArr[i+1] == "my-E" + number))) { valid = true; }
+            else if (letter == "E" && ((cellArr[i+1] == "my-D" + number) || (cellArr[i+1] == "my-F" + number))) { valid = true; }
+            else if (letter == "F" && ((cellArr[i+1] == "my-E" + number) || (cellArr[i+1] == "my-G" + number))) { valid = true; }
+            else if (letter == "G" && ((cellArr[i+1] == "my-F" + number) || (cellArr[i+1] == "my-H" + number))) { valid = true; }
+            else if (letter == "H" && ((cellArr[i+1] == "my-G" + number) || (cellArr[i+1] == "my-I" + number))) { valid = true; }
+            else if (letter == "I" && ((cellArr[i+1] == "my-H" + number) || (cellArr[i+1] == "my-J" + number))) { valid = true; }
             else { return false; }
           }
         }
@@ -410,13 +466,13 @@
 
     function placeShip() {
       if (selectedShip != "" && cellArr.length >= 2 && cellArr.length <= 5) {
-        var adj = verifyAdj();
+        let adj = verifyAdj();
         if (selectedShip == "patrol" && cellArr.length == 2 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "P";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
             shipArr.push(cellArr[i]);
-            cellArr.splice(i, 1);
+            //cellArr.delete(i);
           }
           selectedShip = "";
           cellArr = [];
@@ -426,7 +482,7 @@
             document.getElementById(cellArr[i]).innerHTML = "S";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
             shipArr.push(cellArr[i]);
-            cellArr.splice(i, 1);
+            //cellArr.delete(i);
           }
           selectedShip = "";
           cellArr = [];
@@ -436,7 +492,7 @@
             document.getElementById(cellArr[i]).innerHTML = "D";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
             shipArr.push(cellArr[i]);
-            cellArr.splice(i, 1);
+            //cellArr.delete(i);
           }
           selectedShip = "";
           cellArr = [];
@@ -446,7 +502,7 @@
             document.getElementById(cellArr[i]).innerHTML = "B";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
             shipArr.push(cellArr[i]);
-            cellArr.splice(i, 1);
+            //cellArr.delete(i);
           }
           selectedShip = "";
           cellArr = [];
@@ -456,7 +512,7 @@
             document.getElementById(cellArr[i]).innerHTML = "C";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
             shipArr.push(cellArr[i]);
-            cellArr.splice(i, 1);
+            //cellArr.delete(i);
           }
           selectedShip = "";
           cellArr = [];
