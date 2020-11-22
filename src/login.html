@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles/colors.css">
   <link rel="stylesheet" href="styles/cohesive.css">
   <link rel="stylesheet" href="styles/login.css">
+  <script src="scripts/login.js"></script>
 </head>
 
 <body>
@@ -15,16 +16,16 @@
     <div id="greeting">
       <h1>Please sign-in</h1>
     </div>
-    <form class="" action="index.html" method="post">
+    <div>
       <label>Username: </label>
-      <input type="text" value="username">
+      <input type="text" id="username" value="username">
       <br>
       <label>Password: </label>
-      <input type="password" value="password">
+      <input type="password" id="pw" value="password">
       <br>
-      <button type="button" name="button">Log-in</button>
-    </form>
-    <a href="#">Register new account</a>
+      <button type="button" name="button" onclick="login()">Log-in</button>
+    </div>
+    <a href="signup.html">Register new account</a>
   </div>
 
 </body>
