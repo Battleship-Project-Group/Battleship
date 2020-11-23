@@ -479,7 +479,7 @@
             pArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById(selectedShip).style.border = "none";
+          document.getElementById("patrol").style.border = "none";
           selectedShip = "";
           cellArr = [];
         }
@@ -490,7 +490,7 @@
             sArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById(selectedShip).style.border = "none";
+          document.getElementById("sub").style.border = "none";
           selectedShip = "";
           cellArr = [];
         }
@@ -501,7 +501,7 @@
             dArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById(selectedShip).style.border = "none";
+          document.getElementById("destroyer").style.border = "none";
           selectedShip = "";
           cellArr = [];
         }
@@ -512,7 +512,7 @@
             bArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById(selectedShip).style.border = "none";
+          document.getElementById("battleship").style.border = "none";
           selectedShip = "";
           cellArr = [];
         }
@@ -523,7 +523,7 @@
             cArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById(selectedShip).style.border = "none";
+          document.getElementById("carrier").style.border = "none";
           selectedShip = "";
           cellArr = [];
         }
@@ -549,7 +549,7 @@
     }
 
     function postShips() {
-      if (p.length == 2 && b.length == 3 && d.length == 3 && b.length == 4 && c.length == 5) {
+      if (pArr.length == 2 && sArr.length == 3 && dArr.length == 3 && bArr.length == 4 && cArr.length == 5) {
         document.getElementById("ships").style.display = "hidden";
         pArr_str = JSON.stringify(pArr);
         sArr_str = JSON.stringify(sArr);
