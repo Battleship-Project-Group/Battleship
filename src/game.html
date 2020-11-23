@@ -347,7 +347,11 @@
   <script type="text/javascript">
     var selectedShip = "";
     var cellArr = [];
-    var shipArr = [];
+    var cArr = [];
+    var pArr = [];
+    var dArr = [];
+    var bArr = [];
+    var sArr = [];
     var username = "";
     //var username = "test";
     var lobbyname = "";
@@ -487,6 +491,17 @@
           return false;
         }
 
+        if (cellArr[i].includes("1")) { number = "1"; }
+        else if (cellArr[i].includes("2")) { number = "2"; }
+        else if (cellArr[i].includes("3")) { number = "3"; }
+        else if (cellArr[i].includes("4")) { number = "4"; }
+        else if (cellArr[i].includes("5")) { number = "5"; }
+        else if (cellArr[i].includes("6")) { number = "6"; }
+        else if (cellArr[i].includes("7")) { number = "7"; }
+        else if (cellArr[i].includes("8")) { number = "8"; }
+        else if (cellArr[i].includes("9")) { number = "9"; }
+        else if (cellArr[i].includes("10")) { number = "10"; alert(cellArr[i]); }
+        else { return false; }
         if (cellArr[i].includes("1")) {
           number = "1";
         } else if (cellArr[i].includes("2")) {
@@ -620,6 +635,7 @@
             }
           }
         }
+        else { return false; }
       }
       return valid;
     }
@@ -631,71 +647,84 @@
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "P";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
-            shipArr.push(cellArr[i]);
+            pArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("patrol").style.border = "none";
           selectedShip = "";
           cellArr = [];
         } else if (selectedShip == "sub" && cellArr.length == 3 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "S";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
-            shipArr.push(cellArr[i]);
+            sArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("sub").style.border = "none";
           selectedShip = "";
           cellArr = [];
         } else if (selectedShip = "destroyer" && cellArr.length == 3 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "D";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
-            shipArr.push(cellArr[i]);
+            dArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("destroyer").style.border = "none";
           selectedShip = "";
           cellArr = [];
         } else if (selectedShip = "battleship" && cellArr.length == 4 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "B";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
-            shipArr.push(cellArr[i]);
+            bArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("battleship").style.border = "none";
           selectedShip = "";
           cellArr = [];
         } else if (selectedShip = "carrier" && cellArr.length == 5 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "C";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
-            shipArr.push(cellArr[i]);
+            cArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("carrier").style.border = "none";
           selectedShip = "";
           cellArr = [];
-        } else {
-          alert("Error: Check selected cells and ship. Selected cells must equal ship length.")
+        }
+        else {
+          alert("Error: Check selected cells and ship. Selected cells must equal ship length.");
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
           }
+          document.getElementById(selectedShip).style.border = "none";
           selectedShip = "";
           cellArr = [];
         }
-      } else {
-        alert("Error: Check selected cells and ship. Selected cells must equal ship length.")
+      }
+      else {
+        alert("Error: Check selected cells and ship. Selected cells must equal ship length.");
         for (let i = 0; i < cellArr.length; i++) {
           document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
         }
+        document.getElementById(selectedShip).style.border = "none";
         selectedShip = "";
         cellArr = [];
       }
     }
 
     function postShips() {
-      if (shipArr.length == 17) {
+      if (pArr.length == 2 && sArr.length == 3 && dArr.length == 3 && bArr.length == 4 && cArr.length == 5) {
         document.getElementById("ships").style.display = "hidden";
-        shipArr_str = JSON.stringify(shipArr);
+        pArr_str = JSON.stringify(pArr);
+        sArr_str = JSON.stringify(sArr);
+        dArr_str = JSON.stringify(dArr);
+        bArr_str = JSON.stringify(bArr);
+        cArr_str = JSON.stringify(cArr);
         var xmlhttp = new XMLHttpRequest();
-        var url = "./initPlayer.php";
+        var url = "./scripts/initShips.php";
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var response = JSON.parse(xmlhttp.responseText);
@@ -703,7 +732,7 @@
         };
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("obj=" + shipArr_str);
+        xmlhttp.send("carrier=" + cArr_str, "&battleship=" + bArr_str, "&destroyer=" + dArr_str, "&submarine=" + sArr_str, "&patrolboat=" + pArr_str);
       } else {
         alert("Have all ships been placed?");
       }
