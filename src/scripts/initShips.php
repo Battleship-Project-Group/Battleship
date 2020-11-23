@@ -1,11 +1,19 @@
 <?php
+function parseInput($arr) {
+  $temp = "";
+  foreach (json_decode($arr) as $val) {
+    $temp .= substr($val, 3);
+  }
+  return $temp;
+}
+
 $username = (isset($_POST['uname'])) ? $_POST['uname'] : "test";
 $lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : $username . "-Lobby";
-$carrier = (isset($_POST['carrier'])) ? $_POST['carrier'] : "A1B1C1D1E1";
-$bship = (isset($_POST['battleship'])) ? $_POST['battleship'] : "B1C1D1E1";
-$destroyer = (isset($_POST['destroyer'])) ? $_POST['destroyer'] : "C1D1E1";
-$submarine = (isset($_POST['submarine'])) ? $_POST['submarine'] : "C1D1E1";
-$patrol = (isset($_POST['patrolboat'])) ? $_POST['patrolboat'] : "D1E1";
+$carrier = (isset($_POST['carrier'])) ? parseInput($_POST['carrier']) : "";
+$bship = (isset($_POST['battleship'])) ? parseInput($_POST['battleship']) : "";
+$destroyer = (isset($_POST['destroyer'])) ? parseInput($_POST['destroyer']) : "";
+$submarine = (isset($_POST['submarine'])) ? parseInput($_POST['submarine']) : "";
+$patrol = (isset($_POST['patrolboat'])) ? parseInput($_POST['patrolboat']) : "";
 $servername = "localhost";
 $dbusername = "BattleshipProjectUser";
 $dbpass = "shipbattle321";
@@ -28,6 +36,7 @@ if ($conn->query($sql) === TRUE) {
 
 $conn->close();
 
+echo ($sql);
 echo ($response);
 
 ?>
