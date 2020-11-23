@@ -329,6 +329,11 @@
     </table>
     <button type="button" name="place" onclick="placeShip()">Place Ship</button>
     <button type="button" name="start" onclick="postShips()">START</button>
+    <div class="game-buttons">
+      <button type="button" id="host-button" onclick="startGame()">Host Game</button>
+      <button type="button" id="join-button" onclick="joinGamePrompt()">Join Game</button>
+      <button type="button" id="ready-button" onclick="readyUp()">Ready Up</button>
+    </div>
     <div id="ships">
       <img id="patrol" onclick="selectShip(this.id)" src="images/patrol.png">
       <img id="sub" onclick="selectShip(this.id)" src="images/sub.png">
@@ -347,6 +352,100 @@
     var dArr = [];
     var bArr = [];
     var sArr = [];
+    var username = "";
+    //var username = "test";
+    var lobbyname = "";
+
+    function startGame() {
+      //createLobby.php, send username(required) and lobbyname (not required)
+      lobbyname = prompt("Lobby Name: ");
+      if (lobbyname) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "./scripts/createLobby.php";
+        xmlhttp.onreadystatechange = function() {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var response = xmlhttp.responseText;
+            if (response == "Success") {
+              joinGame(lobbyname);
+            } else {
+              alert(response + ", lobby may already exist");
+            }
+          }
+        };
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname);
+      }
+    }
+
+    function joinGamePrompt() {
+      //initPlayer.php, send username(required), lobbyname (required), and ship locations as strings
+      lobbyname = prompt("Lobby Name: ");
+      if (lobbyname) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "./scripts/initPlayer.php";
+        xmlhttp.onreadystatechange = function() {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var response = xmlhttp.responseText;
+            alert(response);
+          }
+        };
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname);
+      }
+    }
+
+    function joinGame(lobby) {
+      //initPlayer.php, send username(required), lobbyname (required), and ship locations as strings
+      lobbyname = lobby;
+      var xmlhttp = new XMLHttpRequest();
+      var url = "./scripts/initPlayer.php";
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var response = xmlhttp.responseText;
+          alert(response);
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname);
+      console.log(lobbyname);
+    }
+
+    function readyUp() {
+      //readySet.php, send username(required), lobbyname (not required), and readyStatus (defaults to True if not specified)
+      var xmlhttp = new XMLHttpRequest();
+      var url = "./scripts/readySet.php";
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var response = xmlhttp.responseText;
+          alert(response);
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname);
+    }
+
+    function readyUpSet(b) {
+      //readySet.php, send username(required), lobbyname (not required), and readyStatus (defaults to True if not specified)
+      var xmlhttp = new XMLHttpRequest();
+      var url = "./scripts/readySet.php";
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var response = xmlhttp.responseText;
+          alert(response);
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      if (b) {
+        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname + "&ready=True");
+      } else {
+        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname + "&ready=False");
+      }
+    }
 
     function selectShip(ship) {
       document.getElementById("patrol").style.border = "none";
@@ -368,17 +467,29 @@
       let letter = "";
       let number = "";
       for (let i = 0; i < cellArr.length - 1; i++) {
-        if (cellArr[i].includes("A")) { letter = "A"; }
-        else if (cellArr[i].includes("B")) { letter = "B"; }
-        else if (cellArr[i].includes("C")) { letter = "C"; }
-        else if (cellArr[i].includes("D")) { letter = "D"; }
-        else if (cellArr[i].includes("E")) { letter = "E"; }
-        else if (cellArr[i].includes("F")) { letter = "F"; }
-        else if (cellArr[i].includes("G")) { letter = "G"; }
-        else if (cellArr[i].includes("H")) { letter = "H"; }
-        else if (cellArr[i].includes("I")) { letter = "I"; }
-        else if (cellArr[i].includes("J")) { letter = "J"; }
-        else { return false; }
+        if (cellArr[i].includes("A")) {
+          letter = "A";
+        } else if (cellArr[i].includes("B")) {
+          letter = "B";
+        } else if (cellArr[i].includes("C")) {
+          letter = "C";
+        } else if (cellArr[i].includes("D")) {
+          letter = "D";
+        } else if (cellArr[i].includes("E")) {
+          letter = "E";
+        } else if (cellArr[i].includes("F")) {
+          letter = "F";
+        } else if (cellArr[i].includes("G")) {
+          letter = "G";
+        } else if (cellArr[i].includes("H")) {
+          letter = "H";
+        } else if (cellArr[i].includes("I")) {
+          letter = "I";
+        } else if (cellArr[i].includes("J")) {
+          letter = "J";
+        } else {
+          return false;
+        }
 
         if (cellArr[i].includes("1")) { number = "1"; }
         else if (cellArr[i].includes("2")) { number = "2"; }
@@ -391,77 +502,137 @@
         else if (cellArr[i].includes("9")) { number = "9"; }
         else if (cellArr[i].includes("10")) { number = "10"; alert(cellArr[i]); }
         else { return false; }
+        if (cellArr[i].includes("1")) {
+          number = "1";
+        } else if (cellArr[i].includes("2")) {
+          number = "2";
+        } else if (cellArr[i].includes("3")) {
+          number = "3";
+        } else if (cellArr[i].includes("4")) {
+          number = "4";
+        } else if (cellArr[i].includes("5")) {
+          number = "5";
+        } else if (cellArr[i].includes("6")) {
+          number = "6";
+        } else if (cellArr[i].includes("7")) {
+          number = "7";
+        } else if (cellArr[i].includes("8")) {
+          number = "8";
+        } else if (cellArr[i].includes("9")) {
+          number = "9";
+        } else if (cellArr[i].includes("10")) {
+          number = "10";
+        } else {
+          return false;
+        }
 
         if (letter == "A") { // my-A#
           if (number == "1") { // my-A1
-            if (cellArr[i+1] == "my-A2" || cellArr[i+1] == "my-B1") { valid = true; }
-            else { return false; }
-          }
-          else if (number == "10") { // my-A10
-            if (cellArr[i+1] == "my-A9" || cellArr[i+1] == "my-B10") { valid = true; }
-            else { return false; }
-          }
-          else { // my-A2...my-A9
-            if ((cellArr[i+1] == "my-A" + String(Number(number) + 1)) || (cellArr[i+1] == "my-A" + String(Number(number) - 1)) || (cellArr[i+1] == "my-B" + number)) {
+            if (cellArr[i + 1] == "my-A2" || cellArr[i + 1] == "my-B1") {
               valid = true;
+            } else {
+              return false;
             }
-            else { return false; }
+          } else if (number == "10") { // my-A10
+            if (cellArr[i + 1] == "my-A9" || cellArr[i + 1] == "my-B10") {
+              valid = true;
+            } else {
+              return false;
+            }
+          } else { // my-A2...my-A9
+            if ((cellArr[i + 1] == "my-A" + String(Number(number) + 1)) || (cellArr[i + 1] == "my-A" + String(Number(number) - 1)) || (cellArr[i + 1] == "my-B" + number)) {
+              valid = true;
+            } else {
+              return false;
+            }
           }
-        }
-        else if (letter == "J") { //my-J#
+        } else if (letter == "J") { //my-J#
           if (number == "1") { // my-J1
-            if (cellArr[i+1] == "my-J2" || cellArr[i+1] == "my-I1") { valid = true; }
-            else { return false; }
-          }
-          else if (number == "10") { // my-J10
-            if (cellArr[i+1] == "my-J9" || cellArr[i+1] == "my-I10") { valid = true; }
-            else { return false; }
-          }
-          else { // my-J2...my-J9
-            if ((cellArr[i+1] == "my-J" + String(Number(number) + 1)) || (cellArr[i+1] == "my-J" + String(Number(number) - 1)) || (cellArr[i+1] == "my-I" + number)) {
+            if (cellArr[i + 1] == "my-J2" || cellArr[i + 1] == "my-I1") {
               valid = true;
+            } else {
+              return false;
             }
-            else { return false; }
+          } else if (number == "10") { // my-J10
+            if (cellArr[i + 1] == "my-J9" || cellArr[i + 1] == "my-I10") {
+              valid = true;
+            } else {
+              return false;
+            }
+          } else { // my-J2...my-J9
+            if ((cellArr[i + 1] == "my-J" + String(Number(number) + 1)) || (cellArr[i + 1] == "my-J" + String(Number(number) - 1)) || (cellArr[i + 1] == "my-I" + number)) {
+              valid = true;
+            } else {
+              return false;
+            }
           }
-        }
-        else if (letter == "B" || letter == "C" || letter == "D" || letter == "E" || letter == "F" || letter == "G" || letter == "H" || letter == "I") { // my-B#...my-I#
+        } else if (letter == "B" || letter == "C" || letter == "D" || letter == "E" || letter == "F" || letter == "G" || letter == "H" || letter == "I") { // my-B#...my-I#
           if (number == "1") { // my-B1...my-I1
-            if (cellArr[i+1] == "my-" + letter + "2") { valid = true; }
-            else if (letter == "B" && ((cellArr[i+1] == "my-A1") || (cellArr[i+1] == "my-C1"))) { valid = true; }
-            else if (letter == "C" && ((cellArr[i+1] == "my-B1") || (cellArr[i+1] == "my-D1"))) { valid = true; }
-            else if (letter == "D" && ((cellArr[i+1] == "my-C1") || (cellArr[i+1] == "my-E1"))) { valid = true; }
-            else if (letter == "E" && ((cellArr[i+1] == "my-D1") || (cellArr[i+1] == "my-F1"))) { valid = true; }
-            else if (letter == "F" && ((cellArr[i+1] == "my-E1") || (cellArr[i+1] == "my-G1"))) { valid = true; }
-            else if (letter == "G" && ((cellArr[i+1] == "my-F1") || (cellArr[i+1] == "my-H1"))) { valid = true; }
-            else if (letter == "H" && ((cellArr[i+1] == "my-G1") || (cellArr[i+1] == "my-I1"))) { valid = true; }
-            else if (letter == "I" && ((cellArr[i+1] == "my-H1") || (cellArr[i+1] == "my-J1"))) { valid = true; }
-            else { return false; }
-          }
-          else if (number == "10") { // my-B10...my-I10
-            if (cellArr[i+1] == "my-" + letter + "9") { valid = true; }
-            else if (letter == "B" && ((cellArr[i+1] == "my-A10") || (cellArr[i+1] == "my-C10"))) { valid = true; }
-            else if (letter == "C" && ((cellArr[i+1] == "my-B10") || (cellArr[i+1] == "my-D10"))) { valid = true; }
-            else if (letter == "D" && ((cellArr[i+1] == "my-C10") || (cellArr[i+1] == "my-E10"))) { valid = true; }
-            else if (letter == "E" && ((cellArr[i+1] == "my-D10") || (cellArr[i+1] == "my-F10"))) { valid = true; }
-            else if (letter == "F" && ((cellArr[i+1] == "my-E10") || (cellArr[i+1] == "my-G10"))) { valid = true; }
-            else if (letter == "G" && ((cellArr[i+1] == "my-F10") || (cellArr[i+1] == "my-H10"))) { valid = true; }
-            else if (letter == "H" && ((cellArr[i+1] == "my-G10") || (cellArr[i+1] == "my-I10"))) { valid = true; }
-            else if (letter == "I" && ((cellArr[i+1] == "my-H10") || (cellArr[i+1] == "my-J10"))) { valid = true; }
-            else { return false; }
-          }
-          else { // my-B2...my-I9
-            if ((cellArr[i+1] == "my-" + letter + String(Number(number) + 1)) || (cellArr[i+1] == "my-" + letter + String(Number(number) - 1))) {
+            if (cellArr[i + 1] == "my-" + letter + "2") {
               valid = true;
+            } else if (letter == "B" && ((cellArr[i + 1] == "my-A1") || (cellArr[i + 1] == "my-C1"))) {
+              valid = true;
+            } else if (letter == "C" && ((cellArr[i + 1] == "my-B1") || (cellArr[i + 1] == "my-D1"))) {
+              valid = true;
+            } else if (letter == "D" && ((cellArr[i + 1] == "my-C1") || (cellArr[i + 1] == "my-E1"))) {
+              valid = true;
+            } else if (letter == "E" && ((cellArr[i + 1] == "my-D1") || (cellArr[i + 1] == "my-F1"))) {
+              valid = true;
+            } else if (letter == "F" && ((cellArr[i + 1] == "my-E1") || (cellArr[i + 1] == "my-G1"))) {
+              valid = true;
+            } else if (letter == "G" && ((cellArr[i + 1] == "my-F1") || (cellArr[i + 1] == "my-H1"))) {
+              valid = true;
+            } else if (letter == "H" && ((cellArr[i + 1] == "my-G1") || (cellArr[i + 1] == "my-I1"))) {
+              valid = true;
+            } else if (letter == "I" && ((cellArr[i + 1] == "my-H1") || (cellArr[i + 1] == "my-J1"))) {
+              valid = true;
+            } else {
+              return false;
             }
-            else if (letter == "B" && ((cellArr[i+1] == "my-A" + number) || (cellArr[i+1] == "my-C" + number))) { valid = true; }
-            else if (letter == "C" && ((cellArr[i+1] == "my-B" + number) || (cellArr[i+1] == "my-D" + number))) { valid = true; }
-            else if (letter == "D" && ((cellArr[i+1] == "my-C" + number) || (cellArr[i+1] == "my-E" + number))) { valid = true; }
-            else if (letter == "E" && ((cellArr[i+1] == "my-D" + number) || (cellArr[i+1] == "my-F" + number))) { valid = true; }
-            else if (letter == "F" && ((cellArr[i+1] == "my-E" + number) || (cellArr[i+1] == "my-G" + number))) { valid = true; }
-            else if (letter == "G" && ((cellArr[i+1] == "my-F" + number) || (cellArr[i+1] == "my-H" + number))) { valid = true; }
-            else if (letter == "H" && ((cellArr[i+1] == "my-G" + number) || (cellArr[i+1] == "my-I" + number))) { valid = true; }
-            else if (letter == "I" && ((cellArr[i+1] == "my-H" + number) || (cellArr[i+1] == "my-J" + number))) { valid = true; }
-            else { return false; }
+          } else if (number == "10") { // my-B10...my-I10
+            if (cellArr[i + 1] == "my-" + letter + "9") {
+              valid = true;
+            } else if (letter == "B" && ((cellArr[i + 1] == "my-A10") || (cellArr[i + 1] == "my-C10"))) {
+              valid = true;
+            } else if (letter == "C" && ((cellArr[i + 1] == "my-B10") || (cellArr[i + 1] == "my-D10"))) {
+              valid = true;
+            } else if (letter == "D" && ((cellArr[i + 1] == "my-C10") || (cellArr[i + 1] == "my-E10"))) {
+              valid = true;
+            } else if (letter == "E" && ((cellArr[i + 1] == "my-D10") || (cellArr[i + 1] == "my-F10"))) {
+              valid = true;
+            } else if (letter == "F" && ((cellArr[i + 1] == "my-E10") || (cellArr[i + 1] == "my-G10"))) {
+              valid = true;
+            } else if (letter == "G" && ((cellArr[i + 1] == "my-F10") || (cellArr[i + 1] == "my-H10"))) {
+              valid = true;
+            } else if (letter == "H" && ((cellArr[i + 1] == "my-G10") || (cellArr[i + 1] == "my-I10"))) {
+              valid = true;
+            } else if (letter == "I" && ((cellArr[i + 1] == "my-H10") || (cellArr[i + 1] == "my-J10"))) {
+              valid = true;
+            } else {
+              return false;
+            }
+          } else { // my-B2...my-I9
+            if ((cellArr[i + 1] == "my-" + letter + String(Number(number) + 1)) || (cellArr[i + 1] == "my-" + letter + String(Number(number) - 1))) {
+              valid = true;
+            } else if (letter == "B" && ((cellArr[i + 1] == "my-A" + number) || (cellArr[i + 1] == "my-C" + number))) {
+              valid = true;
+            } else if (letter == "C" && ((cellArr[i + 1] == "my-B" + number) || (cellArr[i + 1] == "my-D" + number))) {
+              valid = true;
+            } else if (letter == "D" && ((cellArr[i + 1] == "my-C" + number) || (cellArr[i + 1] == "my-E" + number))) {
+              valid = true;
+            } else if (letter == "E" && ((cellArr[i + 1] == "my-D" + number) || (cellArr[i + 1] == "my-F" + number))) {
+              valid = true;
+            } else if (letter == "F" && ((cellArr[i + 1] == "my-E" + number) || (cellArr[i + 1] == "my-G" + number))) {
+              valid = true;
+            } else if (letter == "G" && ((cellArr[i + 1] == "my-F" + number) || (cellArr[i + 1] == "my-H" + number))) {
+              valid = true;
+            } else if (letter == "H" && ((cellArr[i + 1] == "my-G" + number) || (cellArr[i + 1] == "my-I" + number))) {
+              valid = true;
+            } else if (letter == "I" && ((cellArr[i + 1] == "my-H" + number) || (cellArr[i + 1] == "my-J" + number))) {
+              valid = true;
+            } else {
+              return false;
+            }
           }
         }
         else { return false; }
@@ -482,8 +653,7 @@
           document.getElementById("patrol").style.border = "none";
           selectedShip = "";
           cellArr = [];
-        }
-        else if (selectedShip == "sub" && cellArr.length == 3 && adj) {
+        } else if (selectedShip == "sub" && cellArr.length == 3 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "S";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
@@ -493,8 +663,7 @@
           document.getElementById("sub").style.border = "none";
           selectedShip = "";
           cellArr = [];
-        }
-        else if (selectedShip = "destroyer" && cellArr.length == 3 && adj) {
+        } else if (selectedShip = "destroyer" && cellArr.length == 3 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "D";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
@@ -504,8 +673,7 @@
           document.getElementById("destroyer").style.border = "none";
           selectedShip = "";
           cellArr = [];
-        }
-        else if (selectedShip = "battleship" && cellArr.length == 4 && adj) {
+        } else if (selectedShip = "battleship" && cellArr.length == 4 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "B";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
@@ -515,8 +683,7 @@
           document.getElementById("battleship").style.border = "none";
           selectedShip = "";
           cellArr = [];
-        }
-        else if (selectedShip = "carrier" && cellArr.length == 5 && adj) {
+        } else if (selectedShip = "carrier" && cellArr.length == 5 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "C";
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
@@ -566,8 +733,7 @@
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("carrier=" + cArr_str, "&battleship=" + bArr_str, "&destroyer=" + dArr_str, "&submarine=" + sArr_str, "&patrolboat=" + pArr_str);
-      }
-      else {
+      } else {
         alert("Have all ships been placed?");
       }
     }
