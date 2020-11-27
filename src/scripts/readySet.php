@@ -29,7 +29,6 @@ if ($conn->query($sql) === TRUE) {
 
 $conn->close();
 
-echo ($sql);
 echo ($response);
 
 ?>
