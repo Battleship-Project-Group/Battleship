@@ -7,7 +7,7 @@ $dbusername = "BattleshipProjectUser";
 $dbpass = "shipbattle321";
 $dbname = "gamesdb";
 
-$sql = "UPDATE `" . $lobbyname . "` SET LastTarget = '" . $target . "' WHERE PlayerName = '" . $username . "';";
+$sql = "UPDATE `" . $lobbyname . "` SET `LastTarget`='" . $target . "' WHERE `PlayerName`='" . $username . "';";
 
 $conn = new mysqli($servername,$dbusername,$dbpass,$dbname);
 
