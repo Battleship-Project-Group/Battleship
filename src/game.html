@@ -811,7 +811,7 @@
         };
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("username=" + this.username + "&lobbyname=" + this.lobbyname + "&carrier=" + cArr_str, "&battleship=" + bArr_str, "&destroyer=" + dArr_str, "&submarine=" + sArr_str, "&patrolboat=" + pArr_str);
+        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname + "&carrier=" + cArr_str, "&battleship=" + bArr_str, "&destroyer=" + dArr_str, "&submarine=" + sArr_str, "&patrolboat=" + pArr_str);
       } else {
         alert("Have all ships been placed?");
       }
