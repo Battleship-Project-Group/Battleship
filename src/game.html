@@ -532,195 +532,177 @@
       let valid = false;
       let letter = "";
       let number = "";
+      var table = document.getElementById("player-table")
       for (let i = 0; i < cellArr.length - 1; i++) {
+        valid = false;
         if (cellArr[i].includes("A")) {
-          letter = "A";
+          letter = 1;
         } else if (cellArr[i].includes("B")) {
-          letter = "B";
+          letter = 2;
         } else if (cellArr[i].includes("C")) {
-          letter = "C";
+          letter = 3;
         } else if (cellArr[i].includes("D")) {
-          letter = "D";
+          letter = 4;
         } else if (cellArr[i].includes("E")) {
-          letter = "E";
+          letter = 5;
         } else if (cellArr[i].includes("F")) {
-          letter = "F";
+          letter = 6;
         } else if (cellArr[i].includes("G")) {
-          letter = "G";
+          letter = 7;
         } else if (cellArr[i].includes("H")) {
-          letter = "H";
+          letter = 8;
         } else if (cellArr[i].includes("I")) {
-          letter = "I";
+          letter = 9;
         } else if (cellArr[i].includes("J")) {
-          letter = "J";
+          letter = 10;
         } else {
           return false;
         }
 
-        if (cellArr[i].includes("1")) {
-          number = "1";
+        if (cellArr[i].includes("1") && cellArr[i].includes("0")) {
+          number = 10;
         } else if (cellArr[i].includes("2")) {
-          number = "2";
+          number = 2;
         } else if (cellArr[i].includes("3")) {
-          number = "3";
+          number = 3;
         } else if (cellArr[i].includes("4")) {
-          number = "4";
+          number = 4;
         } else if (cellArr[i].includes("5")) {
-          number = "5";
+          number = 5;
         } else if (cellArr[i].includes("6")) {
-          number = "6";
+          number = 6;
         } else if (cellArr[i].includes("7")) {
-          number = "7";
+          number = 7;
         } else if (cellArr[i].includes("8")) {
-          number = "8";
+          number = 8;
         } else if (cellArr[i].includes("9")) {
-          number = "9";
-        } else if (cellArr[i].includes("10")) {
-          number = "10";
-          alert(cellArr[i]);
-        } else {
-          return false;
-        }
-        if (cellArr[i].includes("1")) {
-          number = "1";
-        } else if (cellArr[i].includes("2")) {
-          number = "2";
-        } else if (cellArr[i].includes("3")) {
-          number = "3";
-        } else if (cellArr[i].includes("4")) {
-          number = "4";
-        } else if (cellArr[i].includes("5")) {
-          number = "5";
-        } else if (cellArr[i].includes("6")) {
-          number = "6";
-        } else if (cellArr[i].includes("7")) {
-          number = "7";
-        } else if (cellArr[i].includes("8")) {
-          number = "8";
-        } else if (cellArr[i].includes("9")) {
-          number = "9";
-        } else if (cellArr[i].includes("10")) {
-          number = "10";
+          number = 9;
+        } else if (cellArr[i].includes("1")) {
+          number = 1;
         } else {
           return false;
         }
 
-        if (letter == "A") { // my-A#
-          if (number == "1") { // my-A1
-            if (cellArr[i + 1] == "my-A2" || cellArr[i + 1] == "my-B1") {
-              valid = true;
-            } else {
-              return false;
+        console.log("Checking adj of " + cellArr[i+1] + " with " + cellArr[i] + ": (" + letter + ", " + number + ")");
+
+        switch (letter) {
+          case 1: // my-A#
+            switch (true) { // my-A1, my-A10, my-A2..my-A9
+              case ((number === 1) && ((cellArr[i + 1] === "my-A2") || (cellArr[i + 1] === "my-B1"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] === "my-A9") || (cellArr[i + 1] === "my-B10"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case (((cellArr[i + 1] == "my-A" + String(number + 1)) || (cellArr[i + 1] == "my-A" + String(number - 1)) || (cellArr[i + 1] == "my-B" + number))):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          } else if (number == "10") { // my-A10
-            if (cellArr[i + 1] == "my-A9" || cellArr[i + 1] == "my-B10") {
-              valid = true;
-            } else {
-              return false;
+            break;
+          case 2: // my-B#
+            switch (true) { // my-B1, my-B10, my-B2..my-B9
+              case ((number === 1) && ((cellArr[i + 1] == "my-A1") || (cellArr[i + 1] == "my-C1") || (cellArr[i + 1] == "my-B2"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] == "my-A10") || (cellArr[i + 1] == "my-C10") || (cellArr[i + 1] == "my-B9"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((cellArr[i + 1] == "my-B" + String(number + 1)) || (cellArr[i + 1] == "my-B" + String(number - 1)) || (cellArr[i + 1] == "my-A" + number) || (cellArr[i + 1] == "my-C" + number)):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          } else { // my-A2...my-A9
-            if ((cellArr[i + 1] == "my-A" + String(Number(number) + 1)) || (cellArr[i + 1] == "my-A" + String(Number(number) - 1)) || (cellArr[i + 1] == "my-B" + number)) {
-              valid = true;
-            } else {
-              return false;
+            break;
+          case 3: // my-C#
+            switch (true) { // my-C1, my-C10, my-C2..my-C9
+              case ((number === 1) && ((cellArr[i + 1] == "my-B1") || (cellArr[i + 1] == "my-D1") || (cellArr[i + 1] == "my-C2"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] == "my-B10") || (cellArr[i + 1] == "my-D10") || (cellArr[i + 1] == "my-C9"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((cellArr[i + 1] == "my-C" + String(number + 1)) || (cellArr[i + 1] == "my-C" + String(number - 1)) || (cellArr[i + 1] == "my-B" + number) || (cellArr[i + 1] == "my-D" + number)):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          }
-        } else if (letter == "J") { //my-J#
-          if (number == "1") { // my-J1
-            if (cellArr[i + 1] == "my-J2" || cellArr[i + 1] == "my-I1") {
-              valid = true;
-            } else {
-              return false;
+            break;
+          case 4: // my-D#
+            switch (true) { // my-D1, my-D10, my-D2..my-D9
+              case ((number === 1) && ((cellArr[i + 1] == "my-C1") || (cellArr[i + 1] == "my-E1") || (cellArr[i + 1] == "my-D2"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] == "my-C10") || (cellArr[i + 1] == "my-E10") || (cellArr[i + 1] == "my-D9"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((cellArr[i + 1] == "my-D" + String(number + 1)) || (cellArr[i + 1] == "my-D" + String(number - 1)) || (cellArr[i + 1] == "my-C" + number) || (cellArr[i + 1] == "my-D" + number)):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          } else if (number == "10") { // my-J10
-            if (cellArr[i + 1] == "my-J9" || cellArr[i + 1] == "my-I10") {
-              valid = true;
-            } else {
-              return false;
+            break;
+          case 5: // my-E#
+            switch (true) { // my-E1, my-E10, my-E2..my-E9
+              case ((number === 1) && ((cellArr[i + 1] == "my-D1") || (cellArr[i + 1] == "my-F1") || (cellArr[i + 1] == "my-E2"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] == "my-D10") || (cellArr[i + 1] == "my-F10") || (cellArr[i + 1] == "my-E9"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((cellArr[i + 1] == "my-E" + String(number + 1)) || (cellArr[i + 1] == "my-E" + String(number - 1)) || (cellArr[i + 1] == "my-D" + number) || (cellArr[i + 1] == "my-F" + number)):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          } else { // my-J2...my-J9
-            if ((cellArr[i + 1] == "my-J" + String(Number(number) + 1)) || (cellArr[i + 1] == "my-J" + String(Number(number) - 1)) || (cellArr[i + 1] == "my-I" + number)) {
-              valid = true;
-            } else {
-              return false;
+            break;
+          case 6: // my-F#
+            switch (true) { // my-F1, my-F10, my-F2..my-F9
+              case ((number === 1) && ((cellArr[i + 1] == "my-E1") || (cellArr[i + 1] == "my-G1") || (cellArr[i + 1] == "my-F2"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] == "my-E10") || (cellArr[i + 1] == "my-G10") || (cellArr[i + 1] == "my-F9"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((cellArr[i + 1] == "my-F" + String(number + 1)) || (cellArr[i + 1] == "my-F" + String(number - 1)) || (cellArr[i + 1] == "my-E" + number) || (cellArr[i + 1] == "my-G" + number)):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          }
-        } else if (letter == "B" || letter == "C" || letter == "D" || letter == "E" || letter == "F" || letter == "G" || letter == "H" || letter == "I") { // my-B#...my-I#
-          if (number == "1") { // my-B1...my-I1
-            if (cellArr[i + 1] == "my-" + letter + "2") {
-              valid = true;
-            } else if (letter == "B" && ((cellArr[i + 1] == "my-A1") || (cellArr[i + 1] == "my-C1"))) {
-              valid = true;
-            } else if (letter == "C" && ((cellArr[i + 1] == "my-B1") || (cellArr[i + 1] == "my-D1"))) {
-              valid = true;
-            } else if (letter == "D" && ((cellArr[i + 1] == "my-C1") || (cellArr[i + 1] == "my-E1"))) {
-              valid = true;
-            } else if (letter == "E" && ((cellArr[i + 1] == "my-D1") || (cellArr[i + 1] == "my-F1"))) {
-              valid = true;
-            } else if (letter == "F" && ((cellArr[i + 1] == "my-E1") || (cellArr[i + 1] == "my-G1"))) {
-              valid = true;
-            } else if (letter == "G" && ((cellArr[i + 1] == "my-F1") || (cellArr[i + 1] == "my-H1"))) {
-              valid = true;
-            } else if (letter == "H" && ((cellArr[i + 1] == "my-G1") || (cellArr[i + 1] == "my-I1"))) {
-              valid = true;
-            } else if (letter == "I" && ((cellArr[i + 1] == "my-H1") || (cellArr[i + 1] == "my-J1"))) {
-              valid = true;
-            } else {
-              return false;
+            break;
+          case 7: // my-G#
+            switch (true) { // my-G1, my-G10, my-G2..my-G9
+              case ((number === 1) && ((cellArr[i + 1] == "my-F1") || (cellArr[i + 1] == "my-H1") || (cellArr[i + 1] == "my-G2"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] == "my-F10") || (cellArr[i + 1] == "my-H10") || (cellArr[i + 1] == "my-G9"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((cellArr[i + 1] == "my-G" + String(number + 1)) || (cellArr[i + 1] == "my-G" + String(number - 1)) || (cellArr[i + 1] == "my-F" + number) || (cellArr[i + 1] == "my-H" + number)):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          } else if (number == "10") { // my-B10...my-I10
-            if (cellArr[i + 1] == "my-" + letter + "9") {
-              valid = true;
-            } else if (letter == "B" && ((cellArr[i + 1] == "my-A10") || (cellArr[i + 1] == "my-C10"))) {
-              valid = true;
-            } else if (letter == "C" && ((cellArr[i + 1] == "my-B10") || (cellArr[i + 1] == "my-D10"))) {
-              valid = true;
-            } else if (letter == "D" && ((cellArr[i + 1] == "my-C10") || (cellArr[i + 1] == "my-E10"))) {
-              valid = true;
-            } else if (letter == "E" && ((cellArr[i + 1] == "my-D10") || (cellArr[i + 1] == "my-F10"))) {
-              valid = true;
-            } else if (letter == "F" && ((cellArr[i + 1] == "my-E10") || (cellArr[i + 1] == "my-G10"))) {
-              valid = true;
-            } else if (letter == "G" && ((cellArr[i + 1] == "my-F10") || (cellArr[i + 1] == "my-H10"))) {
-              valid = true;
-            } else if (letter == "H" && ((cellArr[i + 1] == "my-G10") || (cellArr[i + 1] == "my-I10"))) {
-              valid = true;
-            } else if (letter == "I" && ((cellArr[i + 1] == "my-H10") || (cellArr[i + 1] == "my-J10"))) {
-              valid = true;
-            } else {
-              return false;
+            break;
+          case 8: // my-H#
+            switch (true) { // my-H1, my-H10, my-H2..my-H9
+              case ((number === 1) && ((cellArr[i + 1] == "my-G1") || (cellArr[i + 1] == "my-I1") || (cellArr[i + 1] == "my-H2"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] == "my-G10") || (cellArr[i + 1] == "my-I10") || (cellArr[i + 1] == "my-H9"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((cellArr[i + 1] == "my-H" + String(number + 1)) || (cellArr[i + 1] == "my-H" + String(number - 1)) || (cellArr[i + 1] == "my-G" + number) || (cellArr[i + 1] == "my-I" + number)):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          } else { // my-B2...my-I9
-            if ((cellArr[i + 1] == "my-" + letter + String(Number(number) + 1)) || (cellArr[i + 1] == "my-" + letter + String(Number(number) - 1))) {
-              valid = true;
-            } else if (letter == "B" && ((cellArr[i + 1] == "my-A" + number) || (cellArr[i + 1] == "my-C" + number))) {
-              valid = true;
-            } else if (letter == "C" && ((cellArr[i + 1] == "my-B" + number) || (cellArr[i + 1] == "my-D" + number))) {
-              valid = true;
-            } else if (letter == "D" && ((cellArr[i + 1] == "my-C" + number) || (cellArr[i + 1] == "my-E" + number))) {
-              valid = true;
-            } else if (letter == "E" && ((cellArr[i + 1] == "my-D" + number) || (cellArr[i + 1] == "my-F" + number))) {
-              valid = true;
-            } else if (letter == "F" && ((cellArr[i + 1] == "my-E" + number) || (cellArr[i + 1] == "my-G" + number))) {
-              valid = true;
-            } else if (letter == "G" && ((cellArr[i + 1] == "my-F" + number) || (cellArr[i + 1] == "my-H" + number))) {
-              valid = true;
-            } else if (letter == "H" && ((cellArr[i + 1] == "my-G" + number) || (cellArr[i + 1] == "my-I" + number))) {
-              valid = true;
-            } else if (letter == "I" && ((cellArr[i + 1] == "my-H" + number) || (cellArr[i + 1] == "my-J" + number))) {
-              valid = true;
-            } else {
-              return false;
+            break;
+          case 9: // my-I#
+            switch (true) { // my-I1, my-I10, my-I2..my-I9
+              case ((number === 1) && ((cellArr[i + 1] == "my-H1") || (cellArr[i + 1] == "my-J1") || (cellArr[i + 1] == "my-I2"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] == "my-H10") || (cellArr[i + 1] == "my-J10") || (cellArr[i + 1] == "my-I9"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((cellArr[i + 1] == "my-I" + String(number + 1)) || (cellArr[i + 1] == "my-I" + String(number - 1)) || (cellArr[i + 1] == "my-H" + number) || (cellArr[i + 1] == "my-J" + number)):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
             }
-          }
-        } else {
-          return false;
+            break;
+          case 10: // my-J#
+            switch (true) { // my-J1, my-J10, my-J2..my-J9
+              case ((number === 1) && ((cellArr[i + 1] === "my-J2") || (cellArr[i + 1] === "my-I1"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case ((number === 10) && ((cellArr[i + 1] === "my-J9") || (cellArr[i + 1] === "my-I10"))): valid = true; console.log(cellArr[i+1] + " valid"); break;
+              case (((cellArr[i + 1] == "my-J" + String(number + 1)) || (cellArr[i + 1] == "my-J" + String(number - 1)) || (cellArr[i + 1] == "my-J" + number))):
+                valid = true;
+                console.log(cellArr[i+1] + " valid");
+                break;
+              default: console.log(cellArr[i+1] + " invalid"); return false;
+            }
+            break;
         }
       }
       return valid;
     }
 
     function placeShip() {
+      alert(cellArr + selectedShip);
       if (selectedShip != "" && cellArr.length >= 2 && cellArr.length <= 5) {
         let adj = verifyAdj();
         if (selectedShip == "patrol" && cellArr.length == 2 && adj) {
@@ -730,9 +712,6 @@
             pArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById("patrol").style.border = "none";
-          selectedShip = "";
-          cellArr = [];
         } else if (selectedShip == "sub" && cellArr.length == 3 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "S";
@@ -740,9 +719,6 @@
             sArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById("sub").style.border = "none";
-          selectedShip = "";
-          cellArr = [];
         } else if (selectedShip = "destroyer" && cellArr.length == 3 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "D";
@@ -750,9 +726,6 @@
             dArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById("destroyer").style.border = "none";
-          selectedShip = "";
-          cellArr = [];
         } else if (selectedShip = "battleship" && cellArr.length == 4 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "B";
@@ -760,9 +733,6 @@
             bArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById("battleship").style.border = "none";
-          selectedShip = "";
-          cellArr = [];
         } else if (selectedShip = "carrier" && cellArr.length == 5 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "C";
@@ -770,27 +740,21 @@
             cArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById("carrier").style.border = "none";
-          selectedShip = "";
-          cellArr = [];
         } else {
           alert("Error: Check selected cells and ship. Selected cells must equal ship length.");
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
           }
-          document.getElementById(selectedShip).style.border = "none";
-          selectedShip = "";
-          cellArr = [];
         }
       } else {
         alert("Error: Check selected cells and ship. Selected cells must equal ship length.");
         for (let i = 0; i < cellArr.length; i++) {
           document.getElementById(cellArr[i]).style.backgroundColor = "#c41230";
         }
-        document.getElementById(selectedShip).style.border = "none";
-        selectedShip = "";
-        cellArr = [];
       }
+      //if (selectedShip != "") { document.getElementById(selectedShip).style.border = "none"; }
+      selectedShip = "";
+      cellArr = [];
     }
 
     function postShips() {
