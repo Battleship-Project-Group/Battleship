@@ -329,6 +329,11 @@
     </table>
     <button type="button" name="place" onclick="placeShip()">Place Ship</button>
     <button type="button" name="start" onclick="postShips()">START</button>
+    <div class="temp-testing-buttons">
+      <button type="button" id="username-button" onclick="tempUpdateUsername()">Set Username</button>
+      <button type="button" id="default-ships-button" onclick="tempShips()">Use default ship placement</button>
+      <button type="button" id="attack-button" onclick="tempAttack()">Attack</button>
+    </div>
     <div class="game-buttons">
       <button type="button" id="host-button" onclick="startGame()">Host Game</button>
       <button type="button" id="join-button" onclick="joinGamePrompt()">Join Game</button>
@@ -352,14 +357,75 @@
     var dArr = [];
     var bArr = [];
     var sArr = [];
-    var username = "";
-    //var username = "test";
+    var username;
     var lobbyname = "";
+
+    //Retrieves lastTarget from specified user in game table then checks if it hit against the other user
+    //Can be used to see if we landed an attack or if an attack hit us, username is source of attack
+    function wasHit(name) {
+      var xmlhttp = new XMLHttpRequest();
+      var url = "./scripts/isHit.php";
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var response = xmlhttp.responseText;
+          alert(response);
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send("uname=" + name + "&lobbyname=" + lobbyname);
+    }
+
+    //Updates lastTarget in game table
+    //Then calls wasHit() to see if the attack was successful
+    function tempAttack() {
+      target = prompt("Target location: ");
+      if (target) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "./scripts/attack.php";
+        xmlhttp.onreadystatechange = function() {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var response = xmlhttp.responseText;
+            if (response == "Success") {
+              wasHit(username);
+            }
+          }
+        };
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname + "&target=" + target);
+      }
+    }
+
+    //Used to set username, for testing purposes only
+    //Otherwise username should come from login
+    function tempUpdateUsername() {
+      input = prompt("Username: ");
+      if (input) {
+        this.username = input;
+        console.log("username updated to: ", this.username);
+      }
+    }
+
+    function tempShips() {
+      var xmlhttp = new XMLHttpRequest();
+      var url = "./scripts/initShips.php";
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var response = xmlhttp.responseText;
+          alert(response);
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
+    }
 
     function startGame() {
       //createLobby.php, send username(required) and lobbyname (not required)
-      lobbyname = prompt("Lobby Name: ");
-      if (lobbyname) {
+      input = prompt("Lobby Name: ");
+      if (input) {
+        this.lobbyname = input;
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/createLobby.php";
         xmlhttp.onreadystatechange = function() {
@@ -374,14 +440,15 @@
         };
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname);
+        xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
       }
     }
 
     function joinGamePrompt() {
       //initPlayer.php, send username(required), lobbyname (required), and ship locations as strings
-      lobbyname = prompt("Lobby Name: ");
-      if (lobbyname) {
+      input = prompt("Lobby Name: ");
+      if (input) {
+        this.lobbyname = input;
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/initPlayer.php";
         xmlhttp.onreadystatechange = function() {
@@ -392,13 +459,12 @@
         };
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname);
+        xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
       }
     }
 
     function joinGame(lobby) {
       //initPlayer.php, send username(required), lobbyname (required), and ship locations as strings
-      lobbyname = lobby;
       var xmlhttp = new XMLHttpRequest();
       var url = "./scripts/initPlayer.php";
       xmlhttp.onreadystatechange = function() {
@@ -409,8 +475,8 @@
       };
       xmlhttp.open("POST", url, true);
       xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname);
-      console.log(lobbyname);
+      xmlhttp.send("uame=" + username + "&lobbyname=" + lobby);
+      console.log(lobby);
     }
 
     function readyUp() {
@@ -425,7 +491,7 @@
       };
       xmlhttp.open("POST", url, true);
       xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname);
+      xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
     }
 
     function readyUpSet(b) {
@@ -441,9 +507,9 @@
       xmlhttp.open("POST", url, true);
       xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       if (b) {
-        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname + "&ready=True");
+        xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname + "&ready=True");
       } else {
-        xmlhttp.send("username=" + username + "&lobbyname=" + lobbyname + "&ready=False");
+        xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname + "&ready=False");
       }
     }
 
