@@ -6,7 +6,7 @@ $dbusername = "BattleshipProjectUser";
 $dbpass = "shipbattle321";
 $dbname = "gamesdb";
 
-$sql = "CREATE TABLE `" . $dbname . "`.`" . $lobbyname . "` ( `PlayerName` VARCHAR(255) NOT NULL , `ReadyStatus` BOOLEAN NOT NULL , `MyTurn` BOOLEAN NOT NULL , `CarrierLocation` VARCHAR(10) NOT NULL , `BattleshipLocation` VARCHAR(8) NOT NULL , `DestroyerLocation` VARCHAR(6) NOT NULL , `SubmarineLocation` VARCHAR(6) NOT NULL , `PatrolLocation` VARCHAR(4) NOT NULL , `LastTarget` VARCHAR(2) NOT NULL, `StartTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ) ENGINE = InnoDB;";
+$sql = "CREATE TABLE `" . $dbname . "`.`" . $lobbyname . "` ( `PlayerName` VARCHAR(255) NOT NULL , `ReadyStatus` BOOLEAN NOT NULL , `MyTurn` BOOLEAN NOT NULL , `CarrierLocation` VARCHAR(10) NOT NULL , `BattleshipLocation` VARCHAR(8) NOT NULL , `DestroyerLocation` VARCHAR(6) NOT NULL , `SubmarineLocation` VARCHAR(6) NOT NULL , `PatrolLocation` VARCHAR(4) NOT NULL , `LastTarget` VARCHAR(10) NOT NULL, `StartTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ) ENGINE = InnoDB;";
 
 $conn = new mysqli($servername,$dbusername,$dbpass,$dbname);
 
