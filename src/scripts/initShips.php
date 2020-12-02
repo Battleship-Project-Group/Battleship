@@ -1,11 +1,11 @@
 <?php
-function parseInput($arr) {
+/*function parseInput($arr) {
   $temp = "";
   foreach (json_decode($arr) as $val) {
     $temp .= substr($val, 3);
   }
   return $temp;
-}
+} */
 
 $username = (isset($_POST['uname'])) ? $_POST['uname'] : "test";
 $lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : $username . "-Lobby";

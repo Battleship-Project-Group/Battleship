@@ -889,11 +889,16 @@
     function postShips() {
       if (pArr.length == 2 && sArr.length == 3 && dArr.length == 3 && bArr.length == 4 && cArr.length == 5) {
         document.getElementById("ships").style.display = "hidden";
-        var pArr_str = JSON.stringify(pArr);
-        var sArr_str = JSON.stringify(sArr);
-        var dArr_str = JSON.stringify(dArr);
-        var bArr_str = JSON.stringify(bArr);
-        var cArr_str = JSON.stringify(cArr);
+        var pArrs = [pArr[0].slice(3), pArr[1].slice(3)];
+        var sArrs = [sArr[0].slice(3), sArr[1].slice(3), sArr[2].slice(3)];
+        var dArrs = [dArr[0].slice(3), dArr[1].slice(3), dArr[2].slice(3)];
+        var bArrs = [bArr[0].slice(3), bArr[1].slice(3), bArr[2].slice(3), bArr[3].slice(3)];
+        var cArrs = [cArr[0].slice(3), cArr[1].slice(3), cArr[2].slice(3), cArr[3].slice(3), cArr[4].slice(3)];
+        var pArr_str = JSON.stringify(pArrs);
+        var sArr_str = JSON.stringify(sArrs);
+        var dArr_str = JSON.stringify(dArrs);
+        var bArr_str = JSON.stringify(bArrs);
+        var cArr_str = JSON.stringify(cArrs);
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/initShips.php";
         xmlhttp.onreadystatechange = function() {
