@@ -832,7 +832,6 @@
     }
 
     function placeShip() {
-      alert(cellArr + selectedShip);
       if (selectedShip != "" && cellArr.length >= 2 && cellArr.length <= 5) {
         let adj = verifyAdj();
         if (selectedShip == "patrol" && cellArr.length == 2 && adj) {
