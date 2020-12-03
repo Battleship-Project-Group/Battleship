@@ -1,4 +1,7 @@
 <?php
+//NOTE: BECAUSE COORDS ARE 1-10, ATTACKS ON 1 WILL COUNT AGAINST 10 AND MESS EVERYTHING UP
+//E.G. ATTACK ON A1 WILL COUNT AS SUBSTRING OF A10 AND RESULT IN '0' LEFTOVER
+//NEED TO REDO THE COORDINATES SOMEWHERE ELSE 'A1'->'A01', OR USE 0-9
 
 //Used to split special attacks into seperate coordinates
 function toArray($str) {
@@ -88,17 +91,17 @@ if ($tmp->num_rows == 1) {
         $response = "Success";
       } else {
         //Could not update enemy player's ships
-        $response = "Failure";
+        $response = "Could not update enemy player's ships";
       }
     }
 
   } else {
     //Could not get enemy player's ships
-    $response = "Failure";
+    $response = "Could not get enemy player's ships";
   }
 } else {
   //Could not get player's LastTarget
-  $response = "Failure";
+  $response = "Could not player's LastTarget";
 }
 
 $conn->close();

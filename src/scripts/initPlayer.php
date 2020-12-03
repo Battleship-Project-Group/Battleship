@@ -22,8 +22,8 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-if ($conn->query($sql00)->num_rows < 2) {
-  if ($conn->query($sql0)->num_rows == 0) {
+if ($conn->query($sql0)->num_rows == 0) {
+  if ($conn->query($sql00)->num_rows < 2) {
     //Add user to lobby
     if ($conn->query($sql) === TRUE) {
       $response = "Success";
@@ -31,11 +31,12 @@ if ($conn->query($sql00)->num_rows < 2) {
       $response = "Failure";
     }
   } else {
-    //User already in lobby
-    $response = "Success";
+    //Lobby full
+    $response = "Lobby is already full!";
   }
 } else {
-  $response = "Lobby is already full!";
+  //User already in lobby
+  $response = "Success";
 }
 
 
