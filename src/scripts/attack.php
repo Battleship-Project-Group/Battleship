@@ -1,13 +1,13 @@
 <?php
 $username = (isset($_POST['uname'])) ? $_POST['uname'] : "test";
 $lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : $username . "-Lobby";
-$target = (isset($_POST['target'])) ? $_POST['target'] : "A1";
+$targets= (isset($_POST['targets'])) ? $_POST['targets'] : "";
 $servername = "localhost";
 $dbusername = "BattleshipProjectUser";
 $dbpass = "shipbattle321";
 $dbname = "gamesdb";
 
-$sql = "UPDATE `" . $lobbyname . "` SET `LastTarget`='" . $target . "' WHERE `PlayerName`='" . $username . "';";
+$sql = "UPDATE `" . $lobbyname . "` SET `LastTarget`='" . $targets . "' WHERE `PlayerName`='" . $username . "';";
 
 $conn = new mysqli($servername,$dbusername,$dbpass,$dbname);
 
