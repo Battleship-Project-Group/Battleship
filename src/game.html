@@ -576,7 +576,7 @@
           alert(response);
           if (response == "Success") {
             inLobby = true;
-            this.lobbyname = lobby;
+            lobbyname = lobby;
           }
         }
       };
@@ -585,7 +585,7 @@
       xmlhttp.send("uname=" + username + "&lobbyname=" + lobby);
     }
 
-    //Following function may eventually be used for checking if the game is over 
+    //Following function may eventually be used for checking if the game is over
     async function gameLoop() {
       while (ongoing) {
         if (myTurn) {
@@ -616,7 +616,8 @@
               alert("Game started");
               enemyReady = true;
               ongoing = true;
-              if (reponse["firstPlayer"] == username) {
+              if (response["firstPlayer"] == username) {
+                console.log("myTurn is true now");
                 myTurn = true;
               }
               gameLoop();
