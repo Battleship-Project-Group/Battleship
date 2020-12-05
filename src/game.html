@@ -486,6 +486,7 @@
             if (response == "Success") {
               myTurn = false;
               wasHit(username); //Check if player hit anything
+              alert("Waiting for other player to take their turn: " + enemy);
               wasHit(enemy); //Begin checking for enemy turn
             } else {
               alert(response);
