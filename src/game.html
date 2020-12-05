@@ -352,29 +352,76 @@
   </div>
 
   <script type="text/javascript">
+    //Board variables
     var selectedShip = "";
+    var targetCell = "";
+    var targetCells = [];
     var cellArr = [];
     var cArr = [];
     var pArr = [];
     var dArr = [];
     var bArr = [];
     var sArr = [];
-    var username;
+    //Game variables
+    var username = "";
+    //Get username from local storage
+    if (localStorage.username) username = localStorage.username;
+    //Else redirect user to log-in page
+    else {
+      /*
+      //Commented out for testing purposes
+      alert("Please log-in before starting a game");
+      window.location.href = "login.html";
+      */
+      username = "";
+    }
     var lobbyname = "";
-    var ongoing = false;
-    var targetCell = "";
-    var targetCells = [];
+    var inLobby = false; //Player has joined a game but session is not running yet
+    var ongoing = false; //Game is in session, both players ready, taking turns
+    var myTurn = false; //Bool for player's turn
+    var enemy = ""; //Enemy name
+    var enemyLastTurn = "";
+    var playerReady = false;
+    var enemyReady = false;
     var playerShips = 5;
+
+    //Used as a sort of sleep() function
+    const sleepFor = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
     //Retrieves lastTarget from specified user in game table then checks if it hit against the other user
     //Can be used to see if we landed an attack or if an attack hit us, username is source of attack
     function wasHit(name) {
       var xmlhttp = new XMLHttpRequest();
       var url = "./scripts/isHit.php";
-      xmlhttp.onreadystatechange = function() {
+      xmlhttp.onreadystatechange = async function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          var response = xmlhttp.responseText;
-          alert(response);
+          var response = JSON.parse(xmlhttp.responseText);
+          if (response["Result"] == "Success") {
+            //Variables pulled from php
+            var target;
+            if (response["targetString"] != "ERROR") target = response["targetString"];
+            var shipDestroyedAmount = response["shipDestroyedAmount"];
+            var hitArr = response["hitLocations"];
+            var missArr = response["missLocations"];
+
+            if (name != username) { //Attack source: enemy player
+              if (target != enemyLastTurn) { //Enemy has taken their turn
+                //Still need to update board if player was hit here
+                alert("Your turn");
+
+                playerShips -= response["shipDestroyedAmount"];
+                enemyLastTurn = target;
+                myTurn = true;
+              } else { //Still waiting on enemy to take their turn
+                await sleepFor(5000);
+                wasHit(name);
+              }
+            } else { //Attack source: current player
+              alert(hitArr.length + " hits!");
+            }
+          } else {
+            alert("An error occurred: " + response["Result"]);
+          }
         }
       };
       xmlhttp.open("POST", url, true);
@@ -383,7 +430,7 @@
     }
 
     function attCell(cell) {
-      if (ongoing) {
+      if (ongoing && myTurn) {
         if (targetCell != "") {
           document.getElementById(targetCell).innerHTML = "";
         }
@@ -405,6 +452,9 @@
             targetCells.push(cell);
             break;
         }
+      } else {
+        console.log("ongoing: ", ongoing);
+        console.log("myTurn: ", myTurn);
       }
     }
 
@@ -412,21 +462,20 @@
     //Then calls wasHit() to see if the attack was successful
     function tempAttack(superatt) {
       if (targetCell != "") {
-        var targets = [];
+        var targets = "";
         switch (superatt) {
-          case 0:
-            targets.push(targetCell.slice(6));
+          case 0: //Regular Attack, 1 tile selection
+            targets = targetCell.slice(6);
             break;
-          case 1:
-            targets.push(targetCells[0].slice(6));
-            targets.push(targetCells[1].slice(6));
-            targets.push(targetCells[2].slice(6));
+          case 1: //3-Hit Attack, 3 tile selection
+            targets = targetCells[0].slice(6);
+            targets += targetCells[1].slice(6);
+            targets += targetCells[2].slice(6);
             break;
-          case 2:
-            targets.push(targetCell.slice(6));
-            targets.push(target.slice(0, 1) + (target.slice(1) - 1));
-            targets.push(target.slice(0, 1) + (target.slice(1) + 1));
+          case 2: //Super Attack, 1 tile selection with neighboring tiles hit
+            targets = targetCell.slice(6);
             // 2 more for left and right
+            // Add later
             break;
         }
         var xmlhttp = new XMLHttpRequest();
@@ -435,7 +484,12 @@
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var response = xmlhttp.responseText;
             if (response == "Success") {
-              wasHit(username);
+              myTurn = false;
+              wasHit(username); //Check if player hit anything
+              alert("Waiting for other player to take their turn: " + enemy);
+              wasHit(enemy); //Begin checking for enemy turn
+            } else {
+              alert(response);
             }
           }
         };
@@ -488,14 +542,13 @@
       //createLobby.php, send username(required) and lobbyname (not required)
       input = prompt("Lobby Name: ");
       if (input) {
-        this.lobbyname = input;
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/createLobby.php";
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var response = xmlhttp.responseText;
             if (response == "Success") {
-              joinGame(lobbyname);
+              joinGame(input);
               ongoing = true;
               disableButtons();
             } else {
@@ -505,7 +558,7 @@
         };
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
+        xmlhttp.send("uname=" + username + "&lobbyname=" + input);
       }
     }
 
@@ -513,18 +566,21 @@
       //initPlayer.php, send username(required), lobbyname (required), and ship locations as strings
       input = prompt("Lobby Name: ");
       if (input) {
-        this.lobbyname = input;
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/initPlayer.php";
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var response = xmlhttp.responseText;
             alert(response);
+            if (response == "Success") {
+              inLobby = true;
+              lobbyname = input;
+            }
           }
         };
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
+        xmlhttp.send("uname=" + username + "&lobbyname=" + input);
       }
     }
 
@@ -536,22 +592,51 @@
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           var response = xmlhttp.responseText;
           alert(response);
+          if (response == "Success") {
+            inLobby = true;
+            lobbyname = lobby;
+          }
         }
       };
       xmlhttp.open("POST", url, true);
       xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
-      console.log(lobby);
+      xmlhttp.send("uname=" + username + "&lobbyname=" + lobby);
     }
 
     function readyUp() {
       //readySet.php, send username(required), lobbyname (not required), and readyStatus (defaults to True if not specified)
       var xmlhttp = new XMLHttpRequest();
       var url = "./scripts/readySet.php";
-      xmlhttp.onreadystatechange = function() {
+      xmlhttp.onreadystatechange = async function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          var response = xmlhttp.responseText;
-          alert(response);
+          var response = JSON.parse(xmlhttp.responseText);
+          if (response["Result"] == "Success") {
+            enemyReady = response["playersReady"];
+            if (!playerReady && !enemyReady) {
+              alert("Waiting for other player to ready up...");
+            }
+            playerReady = true; //Used to send above alert only once
+            if (enemyReady) {
+              alert("Game started");
+              enemyReady = true;
+              ongoing = true;
+              if (response["p1"] == username) {
+                enemy = response["p2"];
+              } else {
+                enemy = response["p1"];
+              }
+              if (response["firstPlayer"] == username) {
+                myTurn = true;
+              } else {
+                alert("Waiting for other player to take their turn: " + enemy);
+                wasHit(enemy);
+              }
+            } else {
+              //Wait 1s, then call again to see if enemy has readied up since then
+              await sleepFor(1000);
+              readyUp();
+            }
+          }
         }
       };
       xmlhttp.open("POST", url, true);

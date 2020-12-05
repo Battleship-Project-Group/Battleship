@@ -1,5 +1,4 @@
 <?php
-
 //Used to split special attacks into seperate coordinates
 function toArray($str) {
   $result = array();
@@ -10,17 +9,20 @@ function toArray($str) {
 }
 
 //Inputs
-$username = (isset($_POST['uname'])) ? $_POST['uname'] : "test";
-$lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : $username . "-Lobby";
+$username = (isset($_POST['uname'])) ? $_POST['uname'] : "not jese";
+$lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : "1";
+//$lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : $username . "-Lobby";
 //DB variables
 $servername = "localhost";
 $dbusername = "BattleshipProjectUser";
 $dbpass = "shipbattle321";
 $dbname = "gamesdb";
 //Other variables
-$shipDestroyed = "False";
+$targetStr = "ERROR";
 $hitCount = 0;
 $shipDestroyedAmount = 0;
+$coordsHit = array();
+$coordsMissed = array();
 
 //Used to get target location
 $sql = "SELECT `LastTarget` FROM `" . $lobbyname . "` WHERE `PlayerName`='" . $username . "';";
@@ -44,8 +46,6 @@ if ($tmp->num_rows == 1) {
   $tmp = $conn->query($sql2);
   if ($tmp->num_rows == 1) {
     $entry = $tmp->fetch_assoc();
-    $response = "Hit!";
-
     //Loop through each target in the string
     foreach (toArray($targetStr) as $target){
       //$newLocation used to see if the hit destroyed any ships
@@ -64,14 +64,17 @@ if ($tmp->num_rows == 1) {
         $entry["SubmarineLocation"] = $newLocation = str_replace($target, "", $entry["SubmarineLocation"]);
       } else if (stristr($entry["PatrolLocation"],$target)) {
         $entry["PatrolLocation"] = $newLocation = str_replace($target, "", $entry["PatrolLocation"]);
-      } else {
-        $response = "Miss!";
+      }
+      if ($newLocation == "!") {
         $hitCount--;
+        array_push($coordsMissed,$target);
       }
       //Set destroyed flags
-      if ($newLocation == ""){
-        $shipDestroyed = "True";
+      else if ($newLocation == ""){
         $shipDestroyedAmount++;
+      }
+      else {
+        array_push($coordsHit,$target);
       }
     }
 
@@ -88,21 +91,24 @@ if ($tmp->num_rows == 1) {
         $response = "Success";
       } else {
         //Could not update enemy player's ships
-        $response = "Failure";
+        $response = "Could not update enemy player's ships";
       }
+    } else {
+      //Nothing else to do
+      $response = "Success";
     }
 
   } else {
     //Could not get enemy player's ships
-    $response = "Failure";
+    $response = "Could not get enemy player's ships";
   }
 } else {
   //Could not get player's LastTarget
-  $response = "Failure";
+  $response = "Could not player's LastTarget";
 }
 
 $conn->close();
 
-$output = array("Result"=>$response, "hitCount"=>$hitCount, "shipDestroyed"=>$shipDestroyed, "shipDestroyedAmount"=>$shipDestroyedAmount);
+$output = array("Result"=>$response, "shipDestroyedAmount"=>$shipDestroyedAmount, "hitLocations"=>$coordsHit, "missLocations"=>$coordsMissed, "targetString"=>$targetStr);
 //Return $response, $hitCount, $shipDestroyed, $shipDestroyedAmount
 echo json_encode($output);
