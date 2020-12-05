@@ -15,6 +15,9 @@ $sql0 = "SELECT * FROM `" . $lobbyname . "` WHERE `PlayerName`='" . $username . 
 //Used add player to the lobby
 $sql = "INSERT INTO `" . $lobbyname . "` (`PlayerName`, `ReadyStatus`, `MyTurn`)";
 $sql .= " VALUES ('" . $username . "', '0', '0')";
+//Same as above, except set myTurn to true instead of false
+$sql2 = "INSERT INTO `" . $lobbyname . "` (`PlayerName`, `ReadyStatus`, `MyTurn`)";
+$sql2 .= " VALUES ('" . $username . "', '0', '1')";
 
 $conn = new mysqli($servername,$dbusername,$dbpass,$dbname);
 
@@ -22,20 +25,26 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-if ($conn->query($sql00)->num_rows < 2) {
-  if ($conn->query($sql0)->num_rows == 0) {
+if ($conn->query($sql0)->num_rows == 0) {
+  $temp = $conn->query($sql00);
+  if ($temp->num_rows < 2) {
+    //Host player goes second
+    $sqlFinal = $sql;
+    //Guest player go first
+    if ($temp->num_rows == 1) $sqlFinal = $sql2;
     //Add user to lobby
-    if ($conn->query($sql) === TRUE) {
+    if ($conn->query($sqlFinal) === TRUE) {
       $response = "Success";
     } else {
       $response = "Failure";
     }
   } else {
-    //User already in lobby
-    $response = "Success";
+    //Lobby full
+    $response = "Lobby is already full!";
   }
 } else {
-  $response = "Lobby is already full!";
+  //User already in lobby
+  $response = "Success";
 }
 
 

@@ -74,6 +74,9 @@ function submit() {
         if (httpRequest.status == 200) {
           var response = httpRequest.responseText;
           alert(response);
+          if (response == "Success") {
+            window.location.href = "login.html";
+          }
         }
       }
     } catch (e) {
