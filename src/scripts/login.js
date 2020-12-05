@@ -14,6 +14,9 @@ function login() {
         if (httpRequest.status == 200) {
           var response = httpRequest.responseText;
           alert(response);
+          if (response == "Success"){
+            localStorage.username = username;
+          }
         }
       }
     } catch (e) {

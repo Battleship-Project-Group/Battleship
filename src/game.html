@@ -363,11 +363,23 @@
     var bArr = [];
     var sArr = [];
     //Game variables
-    var username = ""; //Player username, should be a cookie later
-    var lobbyname = ""; //Lobbyname, if in one, should be a cookie later
+    var username = "";
+    //Get username from local storage
+    if (localStorage.username) username = localStorage.username;
+    //Else redirect user to log-in page
+    else {
+      /*
+      //Commented out for testing purposes
+      alert("Please log-in before starting a game");
+      window.location.href = "login.html";
+      */
+      username = "";
+    }
+    var lobbyname = "";
     var inLobby = false; //Player has joined a game but session is not running yet
     var ongoing = false; //Game is in session, both players ready, taking turns
     var myTurn = false; //Bool for player's turn
+    var enemyLastTurn = "";
     var playerReady = false;
     var enemyReady = false;
     var playerShips = 5;
@@ -380,14 +392,31 @@
     function wasHit(name) {
       var xmlhttp = new XMLHttpRequest();
       var url = "./scripts/isHit.php";
-      xmlhttp.onreadystatechange = function() {
+      xmlhttp.onreadystatechange = async function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           var response = JSON.parse(xmlhttp.responseText);
           if (response["Result"] == "Success") {
-            alert(response["hitCount"] + " hits!");
-            //If the source of the attack was not us, update ship count
-            if (name != username) {
-              playerShips -= response["shipDestroyedAmount"];
+            //Variables pulled from php
+            var target;
+            if (response["targetString"] != "ERROR") target = response["targetString"];
+            var shipDestroyedAmount = response["shipDestroyedAmount"];
+            var hitArr = response["hitLocations"];
+            var missArr = response["missLocations"];
+
+            alert(hitArr.length + " hits!");
+
+            if (name != username) { //Attack source: enemy player
+              if (target != enemyLastTurn) { //Enemy has taken their turn
+                //Still need to update board if player was hit here
+
+                playerShips -= response["shipDestroyedAmount"];
+                enemyLastTurn = target;
+                myTurn = true;
+              }
+              //If the enemy hasn't taken their turn, do nothing
+              //gameLoop() will call this again later
+            } else { //Attack source: current player
+
             }
           } else {
             alert("An error occurred!");
@@ -556,6 +585,20 @@
       xmlhttp.send("uname=" + username + "&lobbyname=" + lobby);
     }
 
+    //Following function may eventually be used for checking if the game is over 
+    async function gameLoop() {
+      while (ongoing) {
+        if (myTurn) {
+          //Do nothing, wait for user input
+          continue;
+        } else {
+          //Check if enemy has taken their turn, then wait before checking again
+          wasHit(enemy);
+          await sleepFor(1000);
+        }
+      }
+    }
+
     function readyUp() {
       //readySet.php, send username(required), lobbyname (not required), and readyStatus (defaults to True if not specified)
       var xmlhttp = new XMLHttpRequest();
@@ -568,17 +611,18 @@
             if (!playerReady && !enemyReady) {
               alert("Waiting for other player to ready up...");
             }
-            playerReady = true;
+            playerReady = true; //Used to send above alert only once
             if (enemyReady) {
-              console.log("what gives");
+              alert("Game started");
               enemyReady = true;
               ongoing = true;
-              alert("Game started");
-              //Following is temporary, should fetch whose turn it is from game table instead
-              myTurn = true;
+              if (reponse["firstPlayer"] == username) {
+                myTurn = true;
+              }
+              gameLoop();
             } else {
-              //Keep calling this function to check if other play has readied up
-              await sleepFor(1000); //Wait 1s before checking again
+              //Wait 1s, then call again to see if enemy has readied up since then
+              await sleepFor(1000);
               readyUp();
             }
           }

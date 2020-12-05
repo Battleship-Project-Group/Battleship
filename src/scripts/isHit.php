@@ -21,9 +21,11 @@ $dbusername = "BattleshipProjectUser";
 $dbpass = "shipbattle321";
 $dbname = "gamesdb";
 //Other variables
-$shipDestroyed = "False";
+$targetStr = "ERROR";
 $hitCount = 0;
 $shipDestroyedAmount = 0;
+$coordsHit = array();
+$coordsMissed = array();
 
 //Used to get target location
 $sql = "SELECT `LastTarget` FROM `" . $lobbyname . "` WHERE `PlayerName`='" . $username . "';";
@@ -48,7 +50,6 @@ if ($tmp->num_rows == 1) {
   if ($tmp->num_rows == 1) {
     $entry = $tmp->fetch_assoc();
     $response = "Hit!";
-
     //Loop through each target in the string
     foreach (toArray($targetStr) as $target){
       //$newLocation used to see if the hit destroyed any ships
@@ -67,14 +68,18 @@ if ($tmp->num_rows == 1) {
         $entry["SubmarineLocation"] = $newLocation = str_replace($target, "", $entry["SubmarineLocation"]);
       } else if (stristr($entry["PatrolLocation"],$target)) {
         $entry["PatrolLocation"] = $newLocation = str_replace($target, "", $entry["PatrolLocation"]);
-      } else {
+      }
+      if ($newLocation == "!") {
         $response = "Miss!";
         $hitCount--;
+        array_push($coordsMissed,$target);
       }
       //Set destroyed flags
-      if ($newLocation == ""){
-        $shipDestroyed = "True";
+      else if ($newLocation == ""){
         $shipDestroyedAmount++;
+      }
+      else {
+        array_push($coordsHit,$target);
       }
     }
 
@@ -106,6 +111,6 @@ if ($tmp->num_rows == 1) {
 
 $conn->close();
 
-$output = array("Result"=>$response, "hitCount"=>$hitCount, "shipDestroyed"=>$shipDestroyed, "shipDestroyedAmount"=>$shipDestroyedAmount);
+$output = array("Result"=>$response, "shipDestroyedAmount"=>$shipDestroyedAmount, "hitLocations"=>$coordsHit, "missLocations"=>$coordsMissed, "targetString"=>$targetStr);
 //Return $response, $hitCount, $shipDestroyed, $shipDestroyedAmount
 echo json_encode($output);
