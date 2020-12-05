@@ -379,6 +379,7 @@
     var inLobby = false; //Player has joined a game but session is not running yet
     var ongoing = false; //Game is in session, both players ready, taking turns
     var myTurn = false; //Bool for player's turn
+    var enemy = ""; //Enemy name
     var enemyLastTurn = "";
     var playerReady = false;
     var enemyReady = false;
@@ -403,23 +404,23 @@
             var hitArr = response["hitLocations"];
             var missArr = response["missLocations"];
 
-            alert(hitArr.length + " hits!");
-
             if (name != username) { //Attack source: enemy player
               if (target != enemyLastTurn) { //Enemy has taken their turn
                 //Still need to update board if player was hit here
+                alert("Your turn");
 
                 playerShips -= response["shipDestroyedAmount"];
                 enemyLastTurn = target;
                 myTurn = true;
+              } else { //Still waiting on enemy to take their turn
+                await sleepFor(5000);
+                wasHit(name);
               }
-              //If the enemy hasn't taken their turn, do nothing
-              //gameLoop() will call this again later
             } else { //Attack source: current player
-
+              alert(hitArr.length + " hits!");
             }
           } else {
-            alert("An error occurred!");
+            alert("An error occurred: " + response["Result"]);
           }
         }
       };
@@ -484,7 +485,8 @@
             var response = xmlhttp.responseText;
             if (response == "Success") {
               myTurn = false;
-              wasHit(username);
+              wasHit(username); //Check if player hit anything
+              wasHit(enemy); //Begin checking for enemy turn
             } else {
               alert(response);
             }
@@ -585,20 +587,6 @@
       xmlhttp.send("uname=" + username + "&lobbyname=" + lobby);
     }
 
-    //Following function may eventually be used for checking if the game is over
-    async function gameLoop() {
-      while (ongoing) {
-        if (myTurn) {
-          //Do nothing, wait for user input
-          continue;
-        } else {
-          //Check if enemy has taken their turn, then wait before checking again
-          wasHit(enemy);
-          await sleepFor(1000);
-        }
-      }
-    }
-
     function readyUp() {
       //readySet.php, send username(required), lobbyname (not required), and readyStatus (defaults to True if not specified)
       var xmlhttp = new XMLHttpRequest();
@@ -616,11 +604,17 @@
               alert("Game started");
               enemyReady = true;
               ongoing = true;
-              if (response["firstPlayer"] == username) {
-                console.log("myTurn is true now");
-                myTurn = true;
+              if (response["p1"] == username) {
+                enemy = response["p2"];
+              } else {
+                enemy = response["p1"];
               }
-              gameLoop();
+              if (response["firstPlayer"] == username) {
+                myTurn = true;
+              } else {
+                alert("Waiting for other player to take their turn: " + enemy);
+                wasHit(enemy);
+              }
             } else {
               //Wait 1s, then call again to see if enemy has readied up since then
               await sleepFor(1000);

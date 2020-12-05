@@ -7,6 +7,7 @@ $servername = "localhost";
 $dbusername = "BattleshipProjectUser";
 $dbpass = "shipbattle321";
 $dbname = "gamesdb";
+$players = array();
 $playersReady = FALSE;
 $goesFirst = NULL;
 
@@ -18,7 +19,7 @@ if ($status == "True"){
 }
 $sql .= " WHERE PlayerName = '" . $username . "';";
 $sql2 = "SELECT * FROM `" . $lobbyname . "` WHERE `ReadyStatus`='1'";
-$sql3 = "SELECT `PlayerName` FROM `" . $lobbyname . "` WHERE `MyTurn`='1'";
+$sql3 = "SELECT * FROM `" . $lobbyname . "`";
 
 $conn = new mysqli($servername,$dbusername,$dbpass,$dbname);
 
@@ -33,7 +34,10 @@ if ($conn->query($sql) === TRUE) {
     //Return who goes first (guest always goes first)
     $tmp = $conn->query($sql3);
     while($row = $tmp->fetch_assoc()){
-      $goesFirst = $row["PlayerName"];
+      array_push($players, $row["PlayerName"]);
+      if ($row["MyTurn"] == '1'){
+        $goesFirst = $row["PlayerName"];
+      }
     }
   }
 } else {
@@ -42,12 +46,11 @@ if ($conn->query($sql) === TRUE) {
 
 $conn->close();
 
-if ($goesFirst === NULL){
-  $output = array("Result"=>$response, "playersReady"=>$playersReady);
+if ($playersReady) {
+  $output = array("Result"=>$response, "playersReady"=>$playersReady, "p1"=>$players[0], "p2"=>$players[1], "firstPlayer"=>$goesFirst);
 } else {
   $output = array("Result"=>$response, "playersReady"=>$playersReady, "firstPlayer"=>$goesFirst);
 }
-array_push($output,$goesFirst);
 echo json_encode($output);
 
 ?>

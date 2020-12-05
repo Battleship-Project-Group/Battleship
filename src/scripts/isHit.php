@@ -1,8 +1,4 @@
 <?php
-//NOTE: BECAUSE COORDS ARE 1-10, ATTACKS ON 1 WILL COUNT AGAINST 10 AND MESS EVERYTHING UP
-//E.G. ATTACK ON A1 WILL COUNT AS SUBSTRING OF A10 AND RESULT IN '0' LEFTOVER
-//NEED TO REDO THE COORDINATES SOMEWHERE ELSE 'A1'->'A01', OR USE 0-9
-
 //Used to split special attacks into seperate coordinates
 function toArray($str) {
   $result = array();
@@ -13,8 +9,9 @@ function toArray($str) {
 }
 
 //Inputs
-$username = (isset($_POST['uname'])) ? $_POST['uname'] : "test";
-$lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : $username . "-Lobby";
+$username = (isset($_POST['uname'])) ? $_POST['uname'] : "not jese";
+$lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : "1";
+//$lobbyname = (isset($_POST['lobbyname'])) ? $_POST['lobbyname'] : $username . "-Lobby";
 //DB variables
 $servername = "localhost";
 $dbusername = "BattleshipProjectUser";
@@ -49,7 +46,6 @@ if ($tmp->num_rows == 1) {
   $tmp = $conn->query($sql2);
   if ($tmp->num_rows == 1) {
     $entry = $tmp->fetch_assoc();
-    $response = "Hit!";
     //Loop through each target in the string
     foreach (toArray($targetStr) as $target){
       //$newLocation used to see if the hit destroyed any ships
@@ -70,7 +66,6 @@ if ($tmp->num_rows == 1) {
         $entry["PatrolLocation"] = $newLocation = str_replace($target, "", $entry["PatrolLocation"]);
       }
       if ($newLocation == "!") {
-        $response = "Miss!";
         $hitCount--;
         array_push($coordsMissed,$target);
       }
@@ -98,6 +93,9 @@ if ($tmp->num_rows == 1) {
         //Could not update enemy player's ships
         $response = "Could not update enemy player's ships";
       }
+    } else {
+      //Nothing else to do
+      $response = "Success";
     }
 
   } else {
