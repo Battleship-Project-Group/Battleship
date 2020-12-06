@@ -410,7 +410,7 @@
             console.log("Hit Array [" + missArr + "]");
 
             if (name != username) { //Attack source: enemy player
-              if (target != enemyLastTurn) { //Enemy has taken their turn
+              if (target != enemyLastTurn && target != null) { //Enemy has taken their turn
                 // Update board if player was hit here or where the miss is
                 for (let i = 0; i < hitArr.length; i++) {
                   document.getElementById("my-" + hitArr[i]).innerHTML = "X";
@@ -420,7 +420,6 @@
                   document.getElementById("my-" + missArr[i]).innerHTML = "O";
                   console.log("Miss at (" + missArr[i] + ") player side");
                 }
-                alert("Your turn");
                 //document.getElementById("player_name").style.border = "3px solid black";
                 //document.getElementById("enemy_name").style.border = "none";
 
@@ -428,6 +427,7 @@
                 document.getElementById("player_ships").innerHTML = playerShips + " ships remaining";
                 enemyLastTurn = target;
                 myTurn = true;
+                alert("Your turn");
               } else { //Still waiting on enemy to take their turn
                 await sleepFor(5000);
                 wasHit(name);
@@ -657,6 +657,7 @@
                 enemy = response["p1"];
               }
               if (response["firstPlayer"] == username) {
+                alert("Your turn");
                 myTurn = true;
               } else {
                 alert("Waiting for other player to take their turn: " + enemy);
