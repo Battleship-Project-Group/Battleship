@@ -406,6 +406,8 @@
             var shipDestroyedAmount = response["shipDestroyedAmount"];
             var hitArr = response["hitLocations"];
             var missArr = response["missLocations"];
+            console.log("Hit Array [" + hitArr + "]");
+            console.log("Hit Array [" + missArr + "]");
 
             if (name != username) { //Attack source: enemy player
               if (target != enemyLastTurn) { //Enemy has taken their turn
@@ -416,14 +418,14 @@
                 }
                 for (let i = 0; i < missArr.length; i++) {
                   document.getElementById("my-" + missArr[i]).innerHTML = "O";
-                  console.log("Miss at (" + hitArr[i] + ") player side");
+                  console.log("Miss at (" + missArr[i] + ") player side");
                 }
                 alert("Your turn");
-                document.getElementById("player_name").style.border = "3px solid black";
-                document.getElementById("enemy_name").style.border = "none";
+                //document.getElementById("player_name").style.border = "3px solid black";
+                //document.getElementById("enemy_name").style.border = "none";
 
                 playerShips -= response["shipDestroyedAmount"];
-                document.getElementById(player_ships).innerHTML = playerShips + "ships remaining";
+                document.getElementById("player_ships").innerHTML = playerShips + " ships remaining";
                 enemyLastTurn = target;
                 myTurn = true;
               } else { //Still waiting on enemy to take their turn
@@ -439,12 +441,12 @@
               }
               for (let i = 0; i < missArr.length; i++) {
                 document.getElementById("enemy-" + missArr[i]).innerHTML = "O";
-                console.log("Miss at (" + hitArr[i] + ") enemy side");
+                console.log("Miss at (" + missArr[i] + ") enemy side");
               }
               enemyShips -= response["shipDestroyedAmount"];
-              document.getElementById(enemy_ships).innerHTML = enemyShips + "ships remaining"
-              document.getElementById("enemy_name").style.border = "3px solid black";
-              document.getElementById("player_name").style.border = "none";
+              document.getElementById("enemy_ships").innerHTML = enemyShips + " ships remaining"
+              //document.getElementById("enemy_name").style.border = "3px solid black";
+              //document.getElementById("player_name").style.border = "none";
             }
           } else {
             alert("An error occurred: " + response["Result"]);
