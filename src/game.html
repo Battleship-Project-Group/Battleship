@@ -24,7 +24,8 @@
   <div id="content">
     <table id="enemy-table">
       <thead>
-        <caption>ENEMY</caption>
+        <caption id="enemy_name">ENEMY</caption>
+        <caption id="enemy_ships">5 ships remaining</caption>
       </thead>
       <tbody>
         <tr>
@@ -179,7 +180,8 @@
 
     <table id="player-table">
       <thead>
-        <caption>PLAYER</caption>
+        <caption id="player_name">PLAYER</caption>
+        <caption id="player_ships">5 ships remaining</caption>
       </thead>
       <tbody>
         <tr>
@@ -328,7 +330,7 @@
       </tbody>
     </table>
     <button type="button" id="place" name="place" onclick="placeShip()">Place Ship</button>
-    <button type="button" id="start" name="start" onclick="postShips()">Start Game</button>
+    <button type="button" id="start" name="start" onclick="postShips()">Send to Server</button>
     <div class="temp-testing-buttons">
       <button type="button" id="username-button" onclick="tempUpdateUsername()">Set Username</button>
       <button type="button" id="default-ships-button" onclick="tempShips()">Use default ship placement</button>
@@ -384,6 +386,7 @@
     var playerReady = false;
     var enemyReady = false;
     var playerShips = 5;
+    var enemyShips = 5;
 
     //Used as a sort of sleep() function
     const sleepFor = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
@@ -406,10 +409,15 @@
 
             if (name != username) { //Attack source: enemy player
               if (target != enemyLastTurn) { //Enemy has taken their turn
-                //Still need to update board if player was hit here
+                // Update board if player was hit here or where the miss is
+                for (let i = 0; i < hitArr.length; i ++) { document.getElementById("my-" + hitArr[i]).innerHTML = "X"; console.log("Hit at (" + hitArr[i] + ") player side"); }
+                for (let i = 0; i < missArr.length; i ++) { document.getElementById("my-" + missArr[i]).innerHTML = "O"; console.log("Miss at (" + hitArr[i] + ") player side");}
                 alert("Your turn");
+                document.getElementById("player_name").style.border = "3px solid black";
+                document.getElementById("enemy_name").style.border = "none";
 
                 playerShips -= response["shipDestroyedAmount"];
+                document.getElementById(player_ships).innerHTML = playerShips + "ships remaining"
                 enemyLastTurn = target;
                 myTurn = true;
               } else { //Still waiting on enemy to take their turn
@@ -417,7 +425,15 @@
                 wasHit(name);
               }
             } else { //Attack source: current player
+              // Update board if enemy was hit here or where the miss is
               alert(hitArr.length + " hits!");
+              for (let i = 0; i < hitArr.length; i ++) { document.getElementById("enemy-" + hitArr[i]).innerHTML = "X"; console.log("Hit at (" + hitArr[i] + ") enemy side");}
+              for (let i = 0; i < missArr.length; i ++) { document.getElementById("enemy-" + missArr[i]).innerHTML = "O"; console.log("Miss at (" + hitArr[i] + ") enemy side");}
+              enemyShips -= response["shipDestroyedAmount"];
+              document.getElementById(enemy_ships).innerHTML = enemyShips + "ships remaining"
+              myTurn = false;
+              document.getElementById("enemy_name").style.border = "3px solid black";
+              document.getElementById("player_name").style.border = "none";
             }
           } else {
             alert("An error occurred: " + response["Result"]);
