@@ -410,14 +410,20 @@
             if (name != username) { //Attack source: enemy player
               if (target != enemyLastTurn) { //Enemy has taken their turn
                 // Update board if player was hit here or where the miss is
-                for (let i = 0; i < hitArr.length; i ++) { document.getElementById("my-" + hitArr[i]).innerHTML = "X"; console.log("Hit at (" + hitArr[i] + ") player side"); }
-                for (let i = 0; i < missArr.length; i ++) { document.getElementById("my-" + missArr[i]).innerHTML = "O"; console.log("Miss at (" + hitArr[i] + ") player side");}
+                for (let i = 0; i < hitArr.length; i++) {
+                  document.getElementById("my-" + hitArr[i]).innerHTML = "X";
+                  console.log("Hit at (" + hitArr[i] + ") player side");
+                }
+                for (let i = 0; i < missArr.length; i++) {
+                  document.getElementById("my-" + missArr[i]).innerHTML = "O";
+                  console.log("Miss at (" + hitArr[i] + ") player side");
+                }
                 alert("Your turn");
                 document.getElementById("player_name").style.border = "3px solid black";
                 document.getElementById("enemy_name").style.border = "none";
 
                 playerShips -= response["shipDestroyedAmount"];
-                document.getElementById(player_ships).innerHTML = playerShips + "ships remaining"
+                document.getElementById(player_ships).innerHTML = playerShips + "ships remaining";
                 enemyLastTurn = target;
                 myTurn = true;
               } else { //Still waiting on enemy to take their turn
@@ -427,11 +433,16 @@
             } else { //Attack source: current player
               // Update board if enemy was hit here or where the miss is
               alert(hitArr.length + " hits!");
-              for (let i = 0; i < hitArr.length; i ++) { document.getElementById("enemy-" + hitArr[i]).innerHTML = "X"; console.log("Hit at (" + hitArr[i] + ") enemy side");}
-              for (let i = 0; i < missArr.length; i ++) { document.getElementById("enemy-" + missArr[i]).innerHTML = "O"; console.log("Miss at (" + hitArr[i] + ") enemy side");}
+              for (let i = 0; i < hitArr.length; i++) {
+                document.getElementById("enemy-" + hitArr[i]).innerHTML = "X";
+                console.log("Hit at (" + hitArr[i] + ") enemy side");
+              }
+              for (let i = 0; i < missArr.length; i++) {
+                document.getElementById("enemy-" + missArr[i]).innerHTML = "O";
+                console.log("Miss at (" + hitArr[i] + ") enemy side");
+              }
               enemyShips -= response["shipDestroyedAmount"];
               document.getElementById(enemy_ships).innerHTML = enemyShips + "ships remaining"
-              myTurn = false;
               document.getElementById("enemy_name").style.border = "3px solid black";
               document.getElementById("player_name").style.border = "none";
             }
@@ -448,8 +459,9 @@
     function attCell(cell) {
       if (ongoing && myTurn) {
         if (targetCell != "") {
-          if (document.getElementById(targetCell).innerHTML == "X" || document.getElementById(targetCell).innerHTML == "O") { continue; }
-          else { document.getElementById(targetCell).innerHTML = ""; }
+          if (!(document.getElementById(targetCell).innerHTML == "X" || document.getElementById(targetCell).innerHTML == "O")) {
+            document.getElementById(targetCell).innerHTML = "";
+          }
         }
         targetCell = cell;
         document.getElementById(targetCell).innerHTML = "?";
