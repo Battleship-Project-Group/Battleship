@@ -72,6 +72,7 @@ if ($tmp->num_rows == 1) {
       //Set destroyed flags
       else if ($newLocation == ""){
         $shipDestroyedAmount++;
+        array_push($coordsHit,$target);
       }
       else {
         array_push($coordsHit,$target);
