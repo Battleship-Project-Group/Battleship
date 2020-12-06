@@ -448,7 +448,8 @@
     function attCell(cell) {
       if (ongoing && myTurn) {
         if (targetCell != "") {
-          document.getElementById(targetCell).innerHTML = "";
+          if (document.getElementById(targetCell).innerHTML == "X" || document.getElementById(targetCell).innerHTML == "O") { continue; }
+          else { document.getElementById(targetCell).innerHTML = ""; }
         }
         targetCell = cell;
         document.getElementById(targetCell).innerHTML = "?";
