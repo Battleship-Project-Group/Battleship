@@ -411,6 +411,7 @@
     function wasHit(name) {
       var xmlhttp = new XMLHttpRequest();
       var url = "./scripts/isHit.php";
+      if (name != username) url = "./scripts/isHitWithUpdate.php";
       xmlhttp.onreadystatechange = async function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           var response = JSON.parse(xmlhttp.responseText);

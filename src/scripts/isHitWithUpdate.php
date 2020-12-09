@@ -79,10 +79,7 @@ if ($tmp->num_rows == 1) {
       }
     }
 
-    $response = "Success";
-
     //Update enemy ship locations if there was a hit
-    /*
     if ($hitCount > 0){
       $sqlFinal = "UPDATE `" . $lobbyname . "` SET
       `CarrierLocation`='" . $entry["CarrierLocation"] . "',
@@ -101,7 +98,6 @@ if ($tmp->num_rows == 1) {
       //Nothing else to do
       $response = "Success";
     }
-    */
 
   } else {
     //Could not get enemy player's ships
