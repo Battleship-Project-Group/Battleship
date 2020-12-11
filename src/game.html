@@ -22,6 +22,7 @@
   </div>
 
   <div id="content">
+    <div id="timer"></div>
     <table id="enemy-table">
       <thead>
         <caption id="enemy_name">ENEMY</caption>
@@ -388,6 +389,44 @@
     var playerShips = 5;
     var enemyShips = 5;
 
+    var startTime;
+    var timeI;
+    var updatedTime;
+    var savedTime;
+    var difference;
+    var running = false;
+
+    function startTimer() {
+      if (!running) {
+        running = true;
+        startTime = new Date().getTime();
+        timeI = setInterval(getShowTime, 1);
+      }
+    }
+
+    function getShowTime() {
+      updatedTime = new Date().getTime();
+      if (savedTime) {
+        difference = (updatedTime - startTime) + savedTime;
+      } else {
+        difference = updatedTime - startTime;
+      }
+      var hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      hours = (hours < 10) ? "0" + hours : hours;
+      minutes = (minutes < 10) ? "0" + minutes : minutes;
+      seconds = (seconds < 10) ? "0" + seconds : seconds;
+      document.getElementById("timer").innerHTML = hours + ':' + minutes + ':' + seconds;
+    }
+
+    function stopTimer() {
+      clearInterval(timeI);
+      savedTime = difference;
+      running = false;
+    }
+
     //Used as a sort of sleep() function
     const sleepFor = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
@@ -437,6 +476,7 @@
 
                 playerShips -= response["shipDestroyedAmount"];
                 document.getElementById("player_ships").innerHTML = playerShips + " ships remaining";
+                if (playerShips == 0) { endgame(0); }
                 enemyLastTurn = target;
                 setActivePlayer(username);
               } else { //Still waiting on enemy to take their turn
@@ -456,6 +496,7 @@
               }
               enemyShips -= response["shipDestroyedAmount"];
               document.getElementById("enemy_ships").innerHTML = enemyShips + " ships remaining";
+              if (enemyShips == 0) { endgame(1); }
               setActivePlayer(enemy);
             }
           } else {
@@ -510,11 +551,52 @@
             targets += targetCells[1].slice(6);
             targets += targetCells[2].slice(6);
             break;
-          case 2: //Super Attack, 1 tile selection with neighboring tiles hit
+          case 2: //Super Attack, 1 tile selection with neighboring tiles hit (cross)
             targets = targetCell.slice(6);
-            // 2 more for left and right
-            // Add later
-            break;
+            var letter = targetCell.slice(6,7);
+            var number = targetCell.slice(7);
+            targets += letter + String(Number(number) + 1);
+            targets += letter + String(Number(number) - 1);
+            switch (letter) {
+              case 'A':
+                targets += "B" + number;
+                break;
+              case 'B':
+                targets += "A" + number;
+                targets += "C" + number;
+                break;
+              case 'C':
+                targets += "B" + number;
+                targets += "D" + number;
+                break;
+              case 'D':
+                targets += "C" + number;
+                targets += "E" + number;
+                break;
+              case 'E':
+                targets += "D" + number;
+                targets += "F" + number;
+                break;
+              case 'F':
+                targets += "E" + number;
+                targets += "G" + number;
+                break;
+              case 'G':
+                targets += "F" + number;
+                targets += "H" + number;
+                break;
+              case 'H':
+                targets += "G" + number;
+                targets += "I" + number;
+                break;
+              case 'I':
+                targets += "H" + number;
+                targets += "J" + number;
+                break;
+              case 'J':
+                targets += "I" + number;
+                break;
+            }
         }
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/attack.php";
@@ -653,6 +735,7 @@
             playerReady = true; //Used to send above alert only once
             if (enemyReady) {
               alert("Game started");
+              startTimer();
               enemyReady = true;
               ongoing = true;
               if (response["p1"] == username) {
@@ -691,6 +774,19 @@
       } else {
         xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname + "&ready=False");
       }
+    }
+
+    function endgame(result) {
+      switch (result) {
+        case 0:
+          alert("You lose!");
+          break;
+        case 1:
+          alert("You win!");
+          break;
+      }
+      //ongoing = false;
+      stopTimer();
     }
 
     function selectShip(ship) {
