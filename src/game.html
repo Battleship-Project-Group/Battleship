@@ -338,8 +338,9 @@
       <button type="button" id="attack-button" onclick="tempAttack(0)">Attack</button>
       <button type="button" id="s-attack-button1" onclick="tempAttack(1)">3-Hit Super Attack</button>
       <button type="button" id="s-attack-button2" onclick="tempAttack(2)">Torpedo Super Attack</button>
+      <button type="button" id="s-attack-button3" onclick="tempAttack(3)">Nuke</button>
     </div>
-    <div class="game-buttons">
+    <div id="game-buttons">
       <button type="button" id="host-button" onclick="startGame()">Host Game</button>
       <button type="button" id="join-button" onclick="joinGamePrompt()">Join Game</button>
       <button type="button" id="ready-button" onclick="readyUp()">Ready Up</button>
@@ -609,6 +610,9 @@
             } else {
               targets = targetCell.slice(6);
             }
+          case 3: // Purely for debugging purposes; will break the game for the enemy
+            enemyShips = 0;
+            endgame(1);
         }
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/attack.php";
@@ -679,7 +683,6 @@
             if (response == "Success") {
               joinGame(input);
               ongoing = true;
-              disableButtons();
             } else {
               alert(response + ", lobby may already exist");
             }
@@ -757,6 +760,7 @@
               }
               document.getElementById("player_name").innerHTML = username;
               document.getElementById("enemy_name").innerHTML = enemy;
+              disableButtons();
               setActivePlayer(response["firstPlayer"]);
             } else {
               //Wait 0.5s, then call again to see if enemy has readied up since then
@@ -1164,11 +1168,12 @@
     }
 
     function disableButtons() {
-      if (ongoing) {
-        document.getElementById("ships").visibility = "hidden";
-        document.getElementById("place").visibility = "hidden";
-        document.getElementById("start").visibility = "hidden";
-      }
+      document.getElementById("ships").style.display = "none";
+      document.getElementById("place").style.display = "none";
+      document.getElementById("start").style.display = "none";
+      document.getElementById("game-buttons").style.display = "none";
+      document.getElementById("username-button").style.display = "none";
+      document.getElementById("default-ships-button").style.display = "none";
     }
   </script>
 </body>
