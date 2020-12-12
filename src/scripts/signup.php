@@ -8,7 +8,7 @@ $dbpass = "shipbattle321";
 $dbname = "usersdb";
 $tname = "users";
 $sql = "INSERT INTO " . $tname . "
-VALUES (NULL,'" . $username . "', '" . $email . "', MD5('" . $pass . "'), NULL)";
+VALUES (NULL,'" . $username . "', '" . $email . "', MD5('" . $pass . "'), '0', '0', '00:00:00.000000')";
 
 $conn = new mysqli($servername,$dbusername,$dbpass,$dbname);
 
