@@ -386,8 +386,10 @@
     var enemyLastTurn = "";
     var playerReady = false;
     var enemyReady = false;
+    var victory;
     var playerShips = 5;
     var enemyShips = 5;
+    var superattuse = false;
 
     var startTime;
     var timeI;
@@ -547,55 +549,65 @@
             targets = targetCell.slice(6);
             break;
           case 1: //3-Hit Attack, 3 tile selection
-            targets = targetCells[0].slice(6);
-            targets += targetCells[1].slice(6);
-            targets += targetCells[2].slice(6);
+            if ((superattuse == false) && (playerShips <= 2)) {
+              targets = targetCells[0].slice(6);
+              targets += targetCells[1].slice(6);
+              targets += targetCells[2].slice(6);
+              superattuse = true;
+            } else {
+              targets = targetCell.slice(6);
+            }
             break;
           case 2: //Super Attack, 1 tile selection with neighboring tiles hit (cross)
-            targets = targetCell.slice(6);
-            var letter = targetCell.slice(6,7);
-            var number = targetCell.slice(7);
-            targets += letter + String(Number(number) + 1);
-            targets += letter + String(Number(number) - 1);
-            switch (letter) {
-              case 'A':
-                targets += "B" + number;
-                break;
-              case 'B':
-                targets += "A" + number;
-                targets += "C" + number;
-                break;
-              case 'C':
-                targets += "B" + number;
-                targets += "D" + number;
-                break;
-              case 'D':
-                targets += "C" + number;
-                targets += "E" + number;
-                break;
-              case 'E':
-                targets += "D" + number;
-                targets += "F" + number;
-                break;
-              case 'F':
-                targets += "E" + number;
-                targets += "G" + number;
-                break;
-              case 'G':
-                targets += "F" + number;
-                targets += "H" + number;
-                break;
-              case 'H':
-                targets += "G" + number;
-                targets += "I" + number;
-                break;
-              case 'I':
-                targets += "H" + number;
-                targets += "J" + number;
-                break;
-              case 'J':
-                targets += "I" + number;
-                break;
+            if ((superattuse == false) && (playerShips <= 2)) {
+              targets = targetCell.slice(6);
+              var letter = targetCell.slice(6,7);
+              var number = targetCell.slice(7);
+              if (Number(number)+1 != 10) { targets += letter + String(Number(number) + 1); }
+              if (Number(number)-1 != -1) { targets += letter + String(Number(number) - 1); }
+              switch (letter) {
+                case 'A':
+                  targets += "B" + number;
+                  break;
+                case 'B':
+                  targets += "A" + number;
+                  targets += "C" + number;
+                  break;
+                case 'C':
+                  targets += "B" + number;
+                  targets += "D" + number;
+                  break;
+                case 'D':
+                  targets += "C" + number;
+                  targets += "E" + number;
+                  break;
+                case 'E':
+                  targets += "D" + number;
+                  targets += "F" + number;
+                  break;
+                case 'F':
+                  targets += "E" + number;
+                  targets += "G" + number;
+                  break;
+                case 'G':
+                  targets += "F" + number;
+                  targets += "H" + number;
+                  break;
+                case 'H':
+                  targets += "G" + number;
+                  targets += "I" + number;
+                  break;
+                case 'I':
+                  targets += "H" + number;
+                  targets += "J" + number;
+                  break;
+                case 'J':
+                  targets += "I" + number;
+                  break;
+              }
+              superattuse = true;
+            } else {
+              targets = targetCell.slice(6);
             }
         }
         var xmlhttp = new XMLHttpRequest();
@@ -743,6 +755,8 @@
               } else {
                 enemy = response["p1"];
               }
+              document.getElementById("player_name").innerHTML = username;
+              document.getElementById("enemy_name").innerHTML = enemy;
               setActivePlayer(response["firstPlayer"]);
             } else {
               //Wait 0.5s, then call again to see if enemy has readied up since then
@@ -780,13 +794,26 @@
       switch (result) {
         case 0:
           alert("You lose!");
+          victory = false;
           break;
         case 1:
           alert("You win!");
+          victory = true;
           break;
       }
       //ongoing = false;
       stopTimer();
+      var xmlhttp = new XMLHttpRequest();
+      var url = "./scripts/updatePlayerRecords.php";
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var response = xmlhttp.responseText;
+          alert(response);
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send("uname=" + username + "&time=" + savedTime + "&win=" + victory);
     }
 
     function selectShip(ship) {
