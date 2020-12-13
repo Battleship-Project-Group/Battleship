@@ -1,0 +1,13 @@
+#leaderboard, td, th {
+  border-collapse: collapse;
+  border: 1px solid var(--main-color-white);
+}
+
+#leaderboard {
+  width: 100%;
+  border: 3px solid var(--main-color-white);
+}
+
+#leaderboard tr td{
+  text-align: center;
+}

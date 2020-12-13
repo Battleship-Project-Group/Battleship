@@ -1,0 +1,50 @@
+body {
+  background-color: var(--main-color-blue);
+}
+
+#content {
+  font-family: "montserrat", sans-serif;
+  color: var(--main-color-white);
+  background-color: var(--main-color-red);
+  width: 45%;
+  margin: auto;
+  margin-top: 10%;
+  padding: 75px;
+}
+
+#menu-bar {
+  width: 85%;
+  margin: auto;
+  background-color: var(--main-color-red);
+  padding: 15px;
+}
+
+#menu-bar-table {
+  width: 100%;
+}
+
+#menu-bar-table-row {
+}
+
+.menu-bar-entry {
+  text-align: center;
+  color: var(--main-color-blue);
+  border-width: 0;
+  width: 25%;
+  padding: 0;
+  margin-left: -50px;
+}
+
+.menu-bar-entry a{
+  color: var(--main-color-white);
+  text-decoration: none;
+}
+
+.menu-bar-entry a:visited {
+  color: var(--main-color-white);
+}
+
+.menu-bar-entry a:hover {
+  color: var(--main-color-blue);
+  text-decoration: underline;
+}

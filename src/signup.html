@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Sign-Up</title>
+  <link rel="stylesheet" href="styles/colors.css">
+  <link rel="stylesheet" href="styles/signup.css">
+  <link rel="stylesheet" href="styles/cohesive.css">
+  <script src="scripts/signup.js"></script>
+</head>
+
+<body>
+
+  <div id="menu-bar">
+    <table id="menu-bar-table">
+      <tr id="menu-bar-table-row">
+        <td class="menu-bar-entry"><a href="index.html">Homepage</a></td>
+        <td class="menu-bar-entry"><a href="help.html">Help</a></td>
+        <td class="menu-bar-entry"><a href="contact.html">About</a></td>
+        <td class="menu-bar-entry"><a href="leaderboard.html">Leaderboard</a></td>
+      </tr>
+    </table>
+  </div>
+  
+  <section id="content">
+    <h1>Sign-Up</h1>
+
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" value="">
+      <p></p>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" value="" onchange="validatePassword()">
+      <p></p>
+      <label for="cpassword">Confirm Password:</label>
+      <input type="password" id="cpassword" name="cpassword" value="" onchange="pwMatch()">
+      <p></p>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="" onchange="validateEmail()">
+      <p></p>
+      <label for="cemail">Confirm Email:</label>
+      <input type="email" id="cemail" name="cemail" value="" onchange="emailMatch()">
+      <p></p>
+      <button type="button" name="signup" id="signup" disabled="true" onclick="submit()">Register</button>
+    </div>
+  </section>
+</body>
+
+</html>

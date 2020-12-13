@@ -1,0 +1,17 @@
+#welcome-banner {
+  font-size: 48px;
+  padding: 25px;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+#menu {
+  margin: auto;
+  margin-top: 25px;
+}
+
+#menu tr td {
+  font-size: 24px;
+  padding: 0px 45px;
+}

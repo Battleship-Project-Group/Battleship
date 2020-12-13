@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Log-In</title>
+  <link rel="stylesheet" href="styles/colors.css">
+  <link rel="stylesheet" href="styles/cohesive.css">
+  <link rel="stylesheet" href="styles/login.css">
+  <script src="scripts/login.js"></script>
+</head>
+
+<body>
+
+  <div id="menu-bar">
+    <table id="menu-bar-table">
+      <tr id="menu-bar-table-row">
+        <td class="menu-bar-entry"><a href="index.html">Homepage</a></td>
+        <td class="menu-bar-entry"><a href="help.html">Help</a></td>
+        <td class="menu-bar-entry"><a href="contact.html">About</a></td>
+        <td class="menu-bar-entry"><a href="leaderboard.html">Leaderboard</a></td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="content">
+    <div id="greeting">
+      <h1>Please sign-in</h1>
+    </div>
+    <div>
+      <label>Username: </label>
+      <input type="text" id="username" value="username">
+      <br>
+      <label>Password: </label>
+      <input type="password" id="pw" value="password">
+      <br>
+      <button type="button" name="button" onclick="login()">Log-in</button>
+    </div>
+    <a href="signup.html">Register new account</a>
+  </div>
+
+</body>
+
+</html>

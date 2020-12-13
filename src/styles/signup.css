@@ -1,0 +1,11 @@
+label {
+   width: 150px;
+   display: inline-block;
+   text-align: right;
+}
+
+fieldset {
+  border-color: var(--main-color-blue);
+  border-style: solid;
+  border-width: medium;
+}
