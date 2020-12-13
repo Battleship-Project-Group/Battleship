@@ -330,8 +330,6 @@
         </tr>
       </tbody>
     </table>
-    <button type="button" id="place" name="place" onclick="placeShip()">Place Ship</button>
-    <button type="button" id="start" name="start" onclick="postShips()">Send to Server</button>
     <div class="temp-testing-buttons">
       <button type="button" id="username-button" onclick="tempUpdateUsername()">Set Username</button>
       <button type="button" id="default-ships-button" onclick="tempShips()">Use default ship placement</button>
@@ -341,6 +339,7 @@
       <button type="button" id="s-attack-button3" onclick="tempAttack(3)">Nuke</button>
     </div>
     <div id="game-buttons">
+      <button type="button" id="place" name="place" onclick="placeShip()">Place Ship</button>
       <button type="button" id="host-button" onclick="startGame()">Host Game</button>
       <button type="button" id="join-button" onclick="joinGamePrompt()">Join Game</button>
       <button type="button" id="ready-button" onclick="readyUp()">Ready Up</button>
@@ -481,7 +480,7 @@
                 document.getElementById("player_ships").innerHTML = playerShips + " ships remaining";
                 if (playerShips == 0) { endgame(0); }
                 enemyLastTurn = target;
-                setActivePlayer(username);
+                if (ongoing) { setActivePlayer(username); }
               } else { //Still waiting on enemy to take their turn
                 await sleepFor(5000);
                 wasHit(name);
@@ -500,7 +499,7 @@
               enemyShips -= response["shipDestroyedAmount"];
               document.getElementById("enemy_ships").innerHTML = enemyShips + " ships remaining";
               if (enemyShips == 0) { endgame(1); }
-              setActivePlayer(enemy);
+              if (ongoing) { setActivePlayer(enemy); }
             }
           } else {
             alert("An error occurred: " + response["Result"]);
@@ -543,7 +542,7 @@
     //Updates lastTarget in game table
     //Then calls wasHit() to see if the attack was successful
     function tempAttack(superatt) {
-      if (targetCell != "") {
+      if ((targetCell != "") && (document.getElementById(targetCell).innerHTML != "X") && (document.getElementById(targetCell).innerHTML != "O")) {
         var targets = "";
         switch (superatt) {
           case 0: //Regular Attack, 1 tile selection
@@ -607,6 +606,8 @@
                   break;
               }
               superattuse = true;
+              document.getElementById("s-attack-button1").style.display = "none";
+              document.getElementById("s-attack-button2").style.display = "none";
             } else {
               targets = targetCell.slice(6);
             }
@@ -629,6 +630,8 @@
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname + "&targets=" + targets);
+      } else {
+        alert("Your attack didn't go through!");
       }
     }
 
@@ -737,42 +740,44 @@
 
     function readyUp() {
       //readySet.php, send username(required), lobbyname (not required), and readyStatus (defaults to True if not specified)
-      var xmlhttp = new XMLHttpRequest();
-      var url = "./scripts/readySet.php";
-      xmlhttp.onreadystatechange = async function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-          var response = JSON.parse(xmlhttp.responseText);
-          if (response["Result"] == "Success") {
-            enemyReady = response["playersReady"];
-            if (!playerReady && !enemyReady) {
-              alert("Waiting for other player to ready up...");
-            }
-            playerReady = true; //Used to send above alert only once
-            if (enemyReady) {
-              alert("Game started");
-              startTimer();
-              enemyReady = true;
-              ongoing = true;
-              if (response["p1"] == username) {
-                enemy = response["p2"];
-              } else {
-                enemy = response["p1"];
+      if (postShips()) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "./scripts/readySet.php";
+        xmlhttp.onreadystatechange = async function() {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var response = JSON.parse(xmlhttp.responseText);
+            if (response["Result"] == "Success") {
+              enemyReady = response["playersReady"];
+              if (!playerReady && !enemyReady) {
+                alert("Waiting for other player to ready up...");
               }
-              document.getElementById("player_name").innerHTML = username;
-              document.getElementById("enemy_name").innerHTML = enemy;
-              disableButtons();
-              setActivePlayer(response["firstPlayer"]);
-            } else {
-              //Wait 0.5s, then call again to see if enemy has readied up since then
-              await sleepFor(500);
-              readyUp();
+              playerReady = true; //Used to send above alert only once
+              if (enemyReady) {
+                alert("Game started");
+                startTimer();
+                enemyReady = true;
+                ongoing = true;
+                if (response["p1"] == username) {
+                  enemy = response["p2"];
+                } else {
+                  enemy = response["p1"];
+                }
+                document.getElementById("player_name").innerHTML = username;
+                document.getElementById("enemy_name").innerHTML = enemy;
+                disableButtons();
+                setActivePlayer(response["firstPlayer"]);
+              } else {
+                //Wait 0.5s, then call again to see if enemy has readied up since then
+                await sleepFor(500);
+                readyUp();
+              }
             }
           }
-        }
-      };
-      xmlhttp.open("POST", url, true);
-      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
+        };
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname);
+      }
     }
 
     function readyUpSet(b) {
@@ -805,8 +810,9 @@
           victory = true;
           break;
       }
-      //ongoing = false;
+      ongoing = false;
       stopTimer();
+      document.getElementById("attack-button").style.display = "none";
       var xmlhttp = new XMLHttpRequest();
       var url = "./scripts/updatePlayerRecords.php";
       xmlhttp.onreadystatechange = function() {
@@ -1162,15 +1168,15 @@
         xmlhttp.open("POST", url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname + "&carrier=" + cArr_str + "&battleship=" + bArr_str + "&destroyer=" + dArr_str + "&submarine=" + sArr_str + "&patrolboat=" + pArr_str);
+        return true;
       } else {
         alert("Have all ships been placed?");
+        return false;
       }
     }
 
     function disableButtons() {
       document.getElementById("ships").style.display = "none";
-      document.getElementById("place").style.display = "none";
-      document.getElementById("start").style.display = "none";
       document.getElementById("game-buttons").style.display = "none";
       document.getElementById("username-button").style.display = "none";
       document.getElementById("default-ships-button").style.display = "none";
