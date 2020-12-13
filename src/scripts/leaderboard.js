@@ -1,7 +1,9 @@
 function fetchEntries() {
-  var sortBy = "";
-  //Ascending (ASC) or Descending (DESC)
-  var sortOrder = "";
+  var selection = document.getElementById('sort-select').value;
+  var selections = selection.split('-');
+  var sortBy = selections[0];
+  var sortOrder = selections[1];
+
   var tableDiv = document.getElementById('leaderboard');
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
@@ -10,11 +12,8 @@ function fetchEntries() {
       tableDiv.innerHTML = response;
     }
   }
+
   xmlhttp.open("POST", 'scripts/leaderboardQuery.php');
   xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  if (!sortBy || !sortOrder) {
-    xmlhttp.send();
-  } else {
-    xmlhttp.send("sortBy=" + sortBy + "&order=" + sortOrder);
-  }
+  xmlhttp.send("sortBy=" + sortBy + "&order=" + sortOrder);
 }

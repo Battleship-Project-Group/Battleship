@@ -28,6 +28,17 @@
       <h1>Current Rankings</h1>
     </div>
 
+    <div>
+      <select name="sort" id="sort-select" onchange="fetchEntries()">
+        <option value="GAMESWON-DESC">Games Won ↓</option>
+        <option value="GAMESWON-ASC">Games Won ↑</option>
+        <option value="GAMESPLAYED-DESC">Games Played ↓</option>
+        <option value="GAMESPLAYED-ASC">Games Played ↑</option>
+        <option value="TIMEPLAYED-DESC">Time Played ↓</option>
+        <option value="TIMEPLAYED-ASC">Time Played ↑</option>
+      </select>
+    </div>
+
     <div id="leaderboard">
     </div>
 
