@@ -22,6 +22,7 @@
   </div>
 
   <div id="content">
+    <div id="timer"></div>
     <table id="enemy-table">
       <thead>
         <caption id="enemy_name">ENEMY</caption>
@@ -337,8 +338,9 @@
       <button type="button" id="attack-button" onclick="tempAttack(0)">Attack</button>
       <button type="button" id="s-attack-button1" onclick="tempAttack(1)">3-Hit Super Attack</button>
       <button type="button" id="s-attack-button2" onclick="tempAttack(2)">Torpedo Super Attack</button>
+      <!-- <button type="button" id="s-attack-button3" onclick="tempAttack(3)">Nuke</button> !-->
     </div>
-    <div class="game-buttons">
+    <div id="game-buttons">
       <button type="button" id="host-button" onclick="startGame()">Host Game</button>
       <button type="button" id="join-button" onclick="joinGamePrompt()">Join Game</button>
       <button type="button" id="ready-button" onclick="readyUp()">Ready Up</button>
@@ -385,8 +387,48 @@
     var enemyLastTurn = "";
     var playerReady = false;
     var enemyReady = false;
+    var victory;
     var playerShips = 5;
     var enemyShips = 5;
+    var superattuse = false;
+
+    var startTime;
+    var timeI;
+    var updatedTime;
+    var savedTime;
+    var difference;
+    var running = false;
+
+    function startTimer() {
+      if (!running) {
+        running = true;
+        startTime = new Date().getTime();
+        timeI = setInterval(getShowTime, 1);
+      }
+    }
+
+    function getShowTime() {
+      updatedTime = new Date().getTime();
+      if (savedTime) {
+        difference = (updatedTime - startTime) + savedTime;
+      } else {
+        difference = updatedTime - startTime;
+      }
+      var hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      hours = (hours < 10) ? "0" + hours : hours;
+      minutes = (minutes < 10) ? "0" + minutes : minutes;
+      seconds = (seconds < 10) ? "0" + seconds : seconds;
+      document.getElementById("timer").innerHTML = hours + ':' + minutes + ':' + seconds;
+    }
+
+    function stopTimer() {
+      clearInterval(timeI);
+      savedTime = difference;
+      running = false;
+    }
 
     //Used as a sort of sleep() function
     const sleepFor = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
@@ -437,6 +479,9 @@
 
                 playerShips -= response["shipDestroyedAmount"];
                 document.getElementById("player_ships").innerHTML = playerShips + " ships remaining";
+                if (playerShips == 0) {
+                  endgame(0);
+                }
                 enemyLastTurn = target;
                 setActivePlayer(username);
               } else { //Still waiting on enemy to take their turn
@@ -456,6 +501,9 @@
               }
               enemyShips -= response["shipDestroyedAmount"];
               document.getElementById("enemy_ships").innerHTML = enemyShips + " ships remaining";
+              if (enemyShips == 0) {
+                endgame(1);
+              }
               setActivePlayer(enemy);
             }
           } else {
@@ -506,15 +554,77 @@
             targets = targetCell.slice(6);
             break;
           case 1: //3-Hit Attack, 3 tile selection
-            targets = targetCells[0].slice(6);
-            targets += targetCells[1].slice(6);
-            targets += targetCells[2].slice(6);
+            if ((superattuse == false) && (playerShips <= 2)) {
+              targets = targetCells[0].slice(6);
+              targets += targetCells[1].slice(6);
+              targets += targetCells[2].slice(6);
+              superattuse = true;
+            } else {
+              targets = targetCell.slice(6);
+            }
             break;
-          case 2: //Super Attack, 1 tile selection with neighboring tiles hit
-            targets = targetCell.slice(6);
-            // 2 more for left and right
-            // Add later
+          case 2: //Super Attack, 1 tile selection with neighboring tiles hit (cross)
+            if ((superattuse == false) && (playerShips <= 2)) {
+              targets = targetCell.slice(6);
+              var letter = targetCell.slice(6, 7);
+              var number = targetCell.slice(7);
+              if (Number(number) + 1 != 10) {
+                targets += letter + String(Number(number) + 1);
+              }
+              if (Number(number) - 1 != -1) {
+                targets += letter + String(Number(number) - 1);
+              }
+              switch (letter) {
+                case 'A':
+                  targets += "B" + number;
+                  break;
+                case 'B':
+                  targets += "A" + number;
+                  targets += "C" + number;
+                  break;
+                case 'C':
+                  targets += "B" + number;
+                  targets += "D" + number;
+                  break;
+                case 'D':
+                  targets += "C" + number;
+                  targets += "E" + number;
+                  break;
+                case 'E':
+                  targets += "D" + number;
+                  targets += "F" + number;
+                  break;
+                case 'F':
+                  targets += "E" + number;
+                  targets += "G" + number;
+                  break;
+                case 'G':
+                  targets += "F" + number;
+                  targets += "H" + number;
+                  break;
+                case 'H':
+                  targets += "G" + number;
+                  targets += "I" + number;
+                  break;
+                case 'I':
+                  targets += "H" + number;
+                  targets += "J" + number;
+                  break;
+                case 'J':
+                  targets += "I" + number;
+                  break;
+              }
+              superattuse = true;
+            } else {
+              targets = targetCell.slice(6);
+            }
             break;
+            /*
+            case 3: // Purely for debugging purposes; will break the game for the enemy
+              enemyShips = 0;
+              endgame(1);
+              break;
+            */
         }
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/attack.php";
@@ -585,7 +695,6 @@
             if (response == "Success") {
               joinGame(input);
               ongoing = true;
-              disableButtons();
             } else {
               alert(response + ", lobby may already exist");
             }
@@ -653,6 +762,7 @@
             playerReady = true; //Used to send above alert only once
             if (enemyReady) {
               alert("Game started");
+              startTimer();
               enemyReady = true;
               ongoing = true;
               if (response["p1"] == username) {
@@ -660,6 +770,9 @@
               } else {
                 enemy = response["p1"];
               }
+              document.getElementById("player_name").innerHTML = username;
+              document.getElementById("enemy_name").innerHTML = enemy;
+              disableButtons();
               setActivePlayer(response["firstPlayer"]);
             } else {
               //Wait 0.5s, then call again to see if enemy has readied up since then
@@ -691,6 +804,33 @@
       } else {
         xmlhttp.send("uname=" + username + "&lobbyname=" + lobbyname + "&ready=False");
       }
+    }
+
+    function endgame(result) {
+      var finalTime = document.getElementById('timer').innerHTML;
+      switch (result) {
+        case 0:
+          alert("You lose!");
+          victory = false;
+          break;
+        case 1:
+          alert("You win!");
+          victory = true;
+          break;
+      }
+      //ongoing = false;
+      stopTimer();
+      var xmlhttp = new XMLHttpRequest();
+      var url = "./scripts/updatePlayerRecords.php";
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          var response = xmlhttp.responseText;
+          alert(response);
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send("uname=" + username + "&time=" + finalTime + "&win=" + victory);
     }
 
     function selectShip(ship) {
@@ -1041,11 +1181,12 @@
     }
 
     function disableButtons() {
-      if (ongoing) {
-        document.getElementById("ships").visibility = "hidden";
-        document.getElementById("place").visibility = "hidden";
-        document.getElementById("start").visibility = "hidden";
-      }
+      document.getElementById("ships").style.display = "none";
+      document.getElementById("place").style.display = "none";
+      document.getElementById("start").style.display = "none";
+      document.getElementById("game-buttons").style.display = "none";
+      document.getElementById("username-button").style.display = "none";
+      document.getElementById("default-ships-button").style.display = "none";
     }
   </script>
 </body>
