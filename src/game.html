@@ -479,7 +479,9 @@
 
                 playerShips -= response["shipDestroyedAmount"];
                 document.getElementById("player_ships").innerHTML = playerShips + " ships remaining";
-                if (playerShips == 0) { endgame(0); }
+                if (playerShips == 0) {
+                  endgame(0);
+                }
                 enemyLastTurn = target;
                 setActivePlayer(username);
               } else { //Still waiting on enemy to take their turn
@@ -499,7 +501,9 @@
               }
               enemyShips -= response["shipDestroyedAmount"];
               document.getElementById("enemy_ships").innerHTML = enemyShips + " ships remaining";
-              if (enemyShips == 0) { endgame(1); }
+              if (enemyShips == 0) {
+                endgame(1);
+              }
               setActivePlayer(enemy);
             }
           } else {
@@ -562,10 +566,14 @@
           case 2: //Super Attack, 1 tile selection with neighboring tiles hit (cross)
             if ((superattuse == false) && (playerShips <= 2)) {
               targets = targetCell.slice(6);
-              var letter = targetCell.slice(6,7);
+              var letter = targetCell.slice(6, 7);
               var number = targetCell.slice(7);
-              if (Number(number)+1 != 10) { targets += letter + String(Number(number) + 1); }
-              if (Number(number)-1 != -1) { targets += letter + String(Number(number) - 1); }
+              if (Number(number) + 1 != 10) {
+                targets += letter + String(Number(number) + 1);
+              }
+              if (Number(number) - 1 != -1) {
+                targets += letter + String(Number(number) - 1);
+              }
               switch (letter) {
                 case 'A':
                   targets += "B" + number;
@@ -610,9 +618,9 @@
             } else {
               targets = targetCell.slice(6);
             }
-          case 3: // Purely for debugging purposes; will break the game for the enemy
-            enemyShips = 0;
-            endgame(1);
+            case 3: // Purely for debugging purposes; will break the game for the enemy
+              enemyShips = 0;
+              endgame(1);
         }
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/attack.php";
@@ -795,6 +803,7 @@
     }
 
     function endgame(result) {
+      var finalTime = document.getElementById('timer').innerHTML;
       switch (result) {
         case 0:
           alert("You lose!");
@@ -817,7 +826,7 @@
       };
       xmlhttp.open("POST", url, true);
       xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xmlhttp.send("uname=" + username + "&time=" + savedTime + "&win=" + victory);
+      xmlhttp.send("uname=" + username + "&time=" + finalTime + "&win=" + victory);
     }
 
     function selectShip(ship) {
