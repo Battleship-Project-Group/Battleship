@@ -338,7 +338,7 @@
       <button type="button" id="attack-button" onclick="tempAttack(0)">Attack</button>
       <button type="button" id="s-attack-button1" onclick="tempAttack(1)">3-Hit Super Attack</button>
       <button type="button" id="s-attack-button2" onclick="tempAttack(2)">Torpedo Super Attack</button>
-      <button type="button" id="s-attack-button3" onclick="tempAttack(3)">Nuke</button>
+      <!-- <button type="button" id="s-attack-button3" onclick="tempAttack(3)">Nuke</button> !-->
     </div>
     <div id="game-buttons">
       <button type="button" id="host-button" onclick="startGame()">Host Game</button>
@@ -619,10 +619,12 @@
               targets = targetCell.slice(6);
             }
             break;
-          case 3: // Purely for debugging purposes; will break the game for the enemy
-            enemyShips = 0;
-            endgame(1);
-            break;
+            /*
+            case 3: // Purely for debugging purposes; will break the game for the enemy
+              enemyShips = 0;
+              endgame(1);
+              break;
+            */
         }
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/attack.php";
