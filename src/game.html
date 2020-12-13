@@ -371,12 +371,10 @@
     if (localStorage.username) username = localStorage.username;
     //Else redirect user to log-in page
     else {
-      /*
-      //Commented out for testing purposes
+      //Comment this out for testing purposes
       alert("Please log-in before starting a game");
       window.location.href = "login.html";
-      */
-      username = "";
+      // username = ""; // If the above lines aren't commented, keep this commented
     }
     var lobbyname = "";
     var inLobby = false; //Player has joined a game but session is not running yet
