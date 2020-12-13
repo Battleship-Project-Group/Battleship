@@ -10,4 +10,4 @@ To install using [xampp](https://www.apachefriends.org/download.html):
    - Privileges: All "Data" and "Structure" privileges
 3. Navigate to "http://localhost/Battleship/src/scripts/createDatabases.php" to create the databases necessary for the website to function
 
-The site should be ready to user after completing these steps
+The site should be ready to user after completing these steps at: http://localhost/Battleship/src/index.html
