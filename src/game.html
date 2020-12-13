@@ -618,9 +618,11 @@
             } else {
               targets = targetCell.slice(6);
             }
-            case 3: // Purely for debugging purposes; will break the game for the enemy
-              enemyShips = 0;
-              endgame(1);
+            break;
+          case 3: // Purely for debugging purposes; will break the game for the enemy
+            enemyShips = 0;
+            endgame(1);
+            break;
         }
         var xmlhttp = new XMLHttpRequest();
         var url = "./scripts/attack.php";
