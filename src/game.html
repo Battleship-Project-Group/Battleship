@@ -331,8 +331,8 @@
       </tbody>
     </table>
     <div class="temp-testing-buttons">
-      <button type="button" id="username-button" onclick="tempUpdateUsername()">Set Username</button>
-      <button type="button" id="default-ships-button" onclick="tempShips()">Use default ship placement</button>
+      <!-- <button type="button" id="username-button" onclick="tempUpdateUsername()">Set Username</button> !-->
+      <!-- <button type="button" id="default-ships-button" onclick="tempShips()">Use default ship placement</button> !-->
       <button type="button" id="attack-button" onclick="tempAttack(0)">Attack</button>
       <button type="button" id="s-attack-button1" onclick="tempAttack(1)">3-Hit Super Attack</button>
       <button type="button" id="s-attack-button2" onclick="tempAttack(2)">Torpedo Super Attack</button>
@@ -371,12 +371,12 @@
     if (localStorage.username) username = localStorage.username;
     //Else redirect user to log-in page
     else {
+      /*
+      //Commented out for testing purposes
       alert("Please log-in before starting a game");
       window.location.href = "login.html";
-      /*
-      //Following in place of above for testing purposes
-      username = "";
       */
+      username = "";
     }
     var lobbyname = "";
     var inLobby = false; //Player has joined a game but session is not running yet
