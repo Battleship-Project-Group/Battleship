@@ -1115,7 +1115,7 @@
             pArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
-          document.getElementById("patrol").visibility = "hidden";
+          document.getElementById("patrol").style.visibility = "hidden";
         } else if (selectedShip == "sub" && cellArr.length == 3 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "S";
@@ -1123,6 +1123,7 @@
             sArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("sub").style.visibility = "hidden";
         } else if (selectedShip = "destroyer" && cellArr.length == 3 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "D";
@@ -1130,6 +1131,7 @@
             dArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("destroyer").style.visibility = "hidden";
         } else if (selectedShip = "battleship" && cellArr.length == 4 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "B";
@@ -1137,6 +1139,7 @@
             bArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("battleship").style.visibility = "hidden";
         } else if (selectedShip = "carrier" && cellArr.length == 5 && adj) {
           for (let i = 0; i < cellArr.length; i++) {
             document.getElementById(cellArr[i]).innerHTML = "C";
@@ -1144,6 +1147,7 @@
             cArr.push(cellArr[i]);
             //cellArr.delete(i);
           }
+          document.getElementById("carrier").style.visibility = "hidden";
         } else {
           alert("Error: Check selected cells and ship. Selected cells must equal ship length.");
           for (let i = 0; i < cellArr.length; i++) {
