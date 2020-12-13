@@ -13,7 +13,7 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-print "<table>";
+print "<table id='leaderboard'>";
 
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
